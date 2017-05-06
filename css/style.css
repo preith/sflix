@@ -1,0 +1,113 @@
+div .fill{
+	padding-right:2px;
+	padding-left:2px;
+	transition: transform .3s ease-out;
+}
+div .fill h4 {
+	visibility: hidden;
+}
+div .fill #play {
+	visibility: hidden;
+}
+div.fill:hover{
+	transform: scale(1.2, 1.2);
+	-ms-transform: scale(1.2, 1.2); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2); /* Safari */
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div.fill:hover #first{
+	transform: scale(1.2, 1.2);
+	-ms-transform: scale(1.2, 1.2); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2); /* Safari */
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div.fill:hover #last{
+	transform: scale(1, 1.2);
+	-ms-transform: scale(1, 1.2); /* IE 9 */
+    -webkit-transform: scale(1, 1.2); /* Safari */
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div.fill:hover h4 { 
+	position: absolute; 
+	bottom: -10;
+	left: 5; 
+	width: 100%; 
+	visibility: visible;
+}
+div.fill:hover h4 span{ 
+	color: white; 
+	font: bold 18px/32px Helvetica, Sans-Serif; 
+	letter-spacing: -1px; 
+	padding: 10px;
+}
+div.fill:hover #play { 
+	position: absolute; 
+	top: 50%;
+	left: 50%;
+	transform: scale(5, 5);
+	-webkit-transition: transform 200 ease-in-out;
+	visibility: visible;
+	margin:0;
+	padding:0;
+}
+
+div .fill-sm{
+	padding-right:2px;
+	padding-left:2px;
+}
+div .fill-sm h4 {
+	visibility: hidden;
+}
+div .fill-sm #play {
+	visibility: hidden;
+}
+div.fill-sm:hover{
+	transform: scale(1.2, 1.2);
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div.fill-sm:hover h4 { 
+	position: absolute; 
+	bottom: -10;
+	left: 5; 
+	width: 100%; 
+	visibility: visible;
+}
+div.fill-sm:hover h4 span{ 
+	color: white; 
+	font: bold 14px/24px Helvetica, Sans-Serif; 
+	letter-spacing: -1px; 
+	padding: 10px;
+}
+div.fill-sm:hover #play { 
+	position: absolute; 
+	top: 48%;
+	left: 42%;
+	transform: scale(5, 5);
+	-webkit-transition: transform 200 ease-in-out;
+	visibility: visible;
+	margin:0;
+	padding:0;
+}
+
+div .tiles{
+	padding-left:50px;
+	height: 180px;
+}
+
+div .tile-row{
+	margin-left:-50px;
+	margin-bottom: 0px;
+	height:100%;
+}
+
+a:hover {
+ cursor:pointer;
+}
