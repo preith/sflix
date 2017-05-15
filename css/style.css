@@ -1,3 +1,16 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
 div .fill{
 	padding-right:2px;
 	padding-left:2px;
@@ -9,7 +22,7 @@ div .fill h4 {
 div .fill #play {
 	visibility: hidden;
 }
-div.fill:hover{
+div#default.fill:hover{
 	transform: scale(1.2, 1.2);
 	-ms-transform: scale(1.2, 1.2); /* IE 9 */
     -webkit-transform: scale(1.2, 1.2); /* Safari */
@@ -17,21 +30,24 @@ div.fill:hover{
 	position: relative;
 	z-index: 1000;
 }
-div.fill:hover #first{
-	transform: scale(1.2, 1.2);
-	-ms-transform: scale(1.2, 1.2); /* IE 9 */
-    -webkit-transform: scale(1.2, 1.2); /* Safari */
+div#first.fill:hover{
+	transform: scale(1.2, 1.2) translateX(30px);
+	-ms-transform: scale(1.2, 1.2) translateX(30px); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2) translateX(30px); /* Safari */
 	-webkit-transition: transform 200 ease-in-out;
 	position: relative;
 	z-index: 1000;
 }
-div.fill:hover #last{
-	transform: scale(1, 1.2);
-	-ms-transform: scale(1, 1.2); /* IE 9 */
-    -webkit-transform: scale(1, 1.2); /* Safari */
+div#last.fill:hover{
+	transform: scale(1.2, 1.2) translateX(-30px);
+	-ms-transform: scale(1.2, 1.2) translateX(-30px); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2) translateX(-30px); /* Safari */
 	-webkit-transition: transform 200 ease-in-out;
 	position: relative;
 	z-index: 1000;
+}
+div#more.fill:hover{
+	
 }
 div.fill:hover h4 { 
 	position: absolute; 
@@ -110,4 +126,15 @@ div .tile-row{
 
 a:hover {
  cursor:pointer;
+}
+
+div .footer {
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #222324;
+  font-color: white;
+  margin-top:25px;
+  padding-bottom:25px;
 }
