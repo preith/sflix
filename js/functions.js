@@ -4,6 +4,7 @@ var car_length = 4;
 var API_KEY = "AIzaSyDcxMNdd3HVAC9gFB0OHWGMzN8Rn2f2pjk";
 var pages = {};
 var categories = {}; 
+var main_cats = ["Sheep", "Goats", "Pigs", "Cattle"];
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -19,6 +20,78 @@ function prevClick(id, idx) {
 	if(carousel_currs[idx] == 1){
 		document.getElementById(""+id+"_carousel_prev").style.display = "none";
 	}
+}
+
+function createMainPage(mainName){
+	var html = '<br><br><br><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-4 col-md-offset-3"><h1 style="color:white;text-align:center;">'+mainName+'</h1></div></div><br>';
+
+	var curr_car = 1;
+    var size = categories.length;
+    for (var property in categories) {
+	    if (categories.hasOwnProperty(property)) {
+	    	if(property.split(" - " + mainName).length > 1){
+		    	curr_car = 1;
+				carousel_currs.push(1);
+				idx = carousel_currs.length - 1;
+				name = property.split(" - ")[0];
+				firstHalfHTML = '<div class="row tile-row" style="max-height:150px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:160%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div>';
+				html += firstHalfHTML;
+				html += '<div class="item active">';
+				html += '<div class="row">';
+				var items = categories[property];
+				var size = 11;
+			    	//sets max size of carosel to 15 (4 pages)
+			    if(items.length < 11){
+			    	size = items.length;
+			    }
+			    carousel_lens.push(size / 4);
+			    for(i=0;i < size; i++){
+			    	//console.log(playList.items[i]);
+			    	url = items[i].url;
+			    	if(curr_car == 0){
+			    		html += '<div class="item">';
+						html += '<div class="row">';
+						curr_car += 1;
+			    	}
+			    	if(curr_car == 1) {
+			    		html += '<div class="col-md-3 fill" id="first">';
+			    	} else if(curr_car == 4) {
+			    		html += '<div class="col-md-3 fill" id="last">';
+			    	} else {
+			    		html += '<div class="col-md-3 fill" id="default">';
+			    	}
+					html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:100%;" />';
+					html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
+					html += '<h4><span>'+items[i].title+'</span></h4>';
+					html += '</div>';
+					curr_car += 1;
+					if(curr_car == 5){
+						curr_car = 0;
+						html += '</div>';
+						html += '</div>';
+					}
+			    }
+			    if(curr_car != 0){
+			    		//potentially add a car that shows "click for more"
+			    	if(size == 11){
+			    		html += '<div class="col-md-3 fill" id="more">';
+						html += '<a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos"><img src="img/more.png" style="width:100%;" /></a>';
+						html += '</div>';
+			    	}
+			    	html += '</div>';
+					html += '</div>';
+			    }
+			    html += secondHalfHTML;
+			    //createPage(name, playList, cat);
+			}
+		}
+    }
+    if(curr_car != 0){
+		html += '</div>';
+    }
+    html += '</div></body>';
+    pages[mainName] = html;
 }
 
 function createPage(name, playList, cat){
@@ -71,65 +144,69 @@ function openPage(name){
 	});
 }
 
-function loadCar(name, playList, cat){
-	var curr_car = 1;
-	carousel_currs.push(1);
-	idx = carousel_currs.length - 1;
-	var firstHalfHTML = '<div class="row tile-row" style="max-height:150px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:160%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
-	var secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div>';
-	var html = document.getElementById("cars").innerHTML;
-	html += firstHalfHTML;
-
-	html += '<div class="item active">';
-	html += '<div class="row">';
-	var size = 11;
-    	//sets max size of carosel to 15 (4 pages)
-    if(playList.items.length < 11){
-    	size = playList.items.length;
-    }
-    carousel_lens.push(size / 4);
-    for(i=0;i < size; i++){
-    	//console.log(playList.items[i]);
-    	url = playList.items[i].snippet.resourceId.videoId;
-    	if(curr_car == 0){
-    		html += '<div class="item">';
+function loadMainCars(){
+	var html = "";
+	for(j=0;j < 4; j++){
+		name = main_cats[j];
+		items = categories[name];
+		if(items != undefined){
+			var curr_car = 1;
+			carousel_currs.push(1);
+			idx = carousel_currs.length - 1;
+			firstHalfHTML = '<div class="row tile-row" style="max-height:150px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:160%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+			html += firstHalfHTML;
+			html += '<div class="item active">';
 			html += '<div class="row">';
-			curr_car += 1;
-    	}
-    	if(curr_car == 1) {
-    		html += '<div class="col-md-3 fill" id="first">';
-    	} else if(curr_car == 4) {
-    		html += '<div class="col-md-3 fill" id="last">';
-    	} else {
-    		html += '<div class="col-md-3 fill" id="default">';
-    	}
-		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:100%;" />';
-		html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
-		html += '<h4><span>'+playList.items[i].snippet.title+'</span></h4>';
-		html += '</div>';
-		curr_car += 1;
-		if(curr_car == 5){
-			curr_car = 0;
-			html += '</div>';
-			html += '</div>';
+			var size = 11;
+		    	//sets max size of carosel to 15 (4 pages)
+		    if(items.length < 11){
+		    	size = items.length;
+		    }
+		    carousel_lens.push(size / 4);
+		    for(i=0;i < size; i++){
+		    	//console.log(playList.items[i]);
+		    	url = items[i].url;
+		    	if(curr_car == 0){
+		    		html += '<div class="item">';
+					html += '<div class="row">';
+					curr_car += 1;
+		    	}
+		    	if(curr_car == 1) {
+		    		html += '<div class="col-md-3 fill" id="first">';
+		    	} else if(curr_car == 4) {
+		    		html += '<div class="col-md-3 fill" id="last">';
+		    	} else {
+		    		html += '<div class="col-md-3 fill" id="default">';
+		    	}
+				html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:100%;" />';
+				html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
+				html += '<h4><span>'+items[i].title+'</span></h4>';
+				html += '</div>';
+				curr_car += 1;
+				if(curr_car == 5){
+					curr_car = 0;
+					html += '</div>';
+					html += '</div>';
+				}
+		    }
+		    if(curr_car != 0){
+		    		//potentially add a car that shows "click for more"
+		    	if(size == 11){
+		    		html += '<div class="col-md-3 fill" id="more">';
+					html += '<a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos"><img src="img/more.png" style="width:100%;" /></a>';
+					html += '</div>';
+		    	}
+		    	html += '</div>';
+				html += '</div>';
+		    }
+		    secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div>';
+		    html += secondHalfHTML;
+		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
+		    createMainPage(name);
 		}
-    }
-    if(curr_car != 0){
-    		//potentially add a car that shows "click for more"
-    	if(size == 11){
-    		html += '<div class="col-md-3 fill" id="more">';
-			html += '<a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos"><img src="img/more.png" style="width:100%;" /></a>';
-			html += '</div>';
-    	}
-    	html += '</div>';
-		html += '</div>';
-    }
-    html += secondHalfHTML;
-    document.getElementById("cars").innerHTML = html;
-    createPage(name, playList, cat);
-    pages["home"] = document.getElementById("content").innerHTML;
-    //console.log(pages);
-    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
+	}
+	document.getElementById("cars").innerHTML = html;
+	pages["home"] = document.getElementById("content").innerHTML;
 }
 
 function getPlaylists(_callback){
@@ -143,14 +220,14 @@ function getPlaylists(_callback){
 				var id = pl.id;
 				var title = pl.snippet.title;
 				var cat = title.split(" - ")[1];
-				title = title.split(" - ")[0];
+				//title = title.split(" - ")[0];
 				console.log(cat);
 				if(cat != undefined){
 					if(categories[cat] == undefined){
 						categories[cat] = [];
 					}
 					categories[title] = [];
-					getVidsFromPlaylist(id, title, cat);
+					getVidsFromPlaylist(id, title, cat, i, obj.items.length - 1);
 				}
 			}
 		}
@@ -158,14 +235,16 @@ function getPlaylists(_callback){
 	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=UCvnOcTFOvNxpv7-tUw-B4QA&maxResults=50&key="+API_KEY+"", true);
 	xhttp.send();
 }
-function getVidsFromPlaylist(id, title, cat){
+function getVidsFromPlaylist(id, title, cat, current, end){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
 			if(obj.items.length > 0){
-				//loadCar(title, obj, cat);
 				organizeVideos(title, obj, cat);
+				if(current == end){
+					loadMainCars();
+				}
 			}
 		}
 	};
@@ -180,13 +259,8 @@ function loadFirstContent(){
 	//html = '<div class="jumbotron"><div class="row" style="max-height:420px;"><div class="row"><div class="col-md-6 col-md-offset-1" style="margin-right:-20px;"><img src="img/ads/primary/CWL-bannerjan.png" style="width:100%;"></div><div class="col-md-4"><img src="img/ads/secondary/harmsshowlambs.png" style="width:98%;padding-bottom:10px;"><img src="img/ads/secondary/MacLennanClubLambs.png" style="width:98%;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
 	document.getElementById("content").innerHTML = html;
 }
-function loadFooter(){
-	html = '<div class="col-md-12"><div class="col-md-6"><div class="col-md-4"><div class="col-md-3"><a target="_blank" href="https://www.facebook.com/showbarnflix/"><img height="40px" src="img/fb.png"></a></div><div class="col-md-3"><a target="_blank" href="https://twitter.com/showbarnflix"><img height="40px" src="img/twit.png"></a></div><div class="col-md-3"><a target="_blank" href="https://www.youtube.com/channel/UCvnOcTFOvNxpv7-tUw-B4QA"><img height="40px" src="img/yt.png"></a></div><div class="col-md-3"><a target="_blank" href="https://www.instagram.com/showbarnflix/"><img height="40px" src="img/insta.png"></a></div></div></div><div class="col-md-6" style="text-align:right;">© Copyright 2016 ShowBarnFlix.com | Sponsored by <a target="_blank" href="https://www.wlivestock.com" style="color:white;">Willoughby Sales</a><br><a href="mailto:landree@wlivestock.com" style="color:white;">landree@wlivestock.com</a> | <a style="color:white;" href="tel:303-519-1166">(303) 519-1166</a></div></div>';
-	document.getElementById("foot").innerHTML = html;
-}
 
 window.onload = function() {
-	secondFunction();
 	loadFirstContent();
 	getPlaylists(function() {
         console.log('huzzah, I\'m done!');
