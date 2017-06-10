@@ -6,6 +6,7 @@ var API_KEY = "AIzaSyDcxMNdd3HVAC9gFB0OHWGMzN8Rn2f2pjk";
 var pages = {};
 var categories = {}; 
 var main_cats = ["Sheep", "Goats", "Pigs", "Cattle"];
+var allAdsList = []
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -52,6 +53,35 @@ function createRecentPage(){
     }
     html += '</div></body>';
     pages["Most_Recent"] = html;
+}
+
+function createAdsPage(){
+	name = "Advertisements";
+	var html = '<br><br><br><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="col-md-offset-1 col-md-10"><br>';
+
+	var curr_car = 1;
+	items = categories["ads"]
+    var size = items.length;
+    for(i=0;i < size; i++){
+    	url = items[i].url;
+    	src = items[i].title;
+    	if(curr_car == 1){
+			html += '<div class="row" style="margin-bottom:25px;">';
+    	}
+    	html += '<div class="col-md-3 fill-sm">';
+		html += '<a target="_blank" href="'+url+'"><img src="'+src+'" style="width:90%;" /></a>';
+		html += '</div>';
+		curr_car += 1;
+		if(curr_car > 4){
+			curr_car = 1;
+			html += '</div>';
+		}
+    }
+    if(curr_car != 0){
+		html += '</div>';
+    }
+    html += '</div></body>';
+    pages["Advertisements"] = html;
 }
 
 function createMainPage(mainName){
@@ -180,24 +210,32 @@ function openPage(name){
 
 function loadMainCars(){
 	var html = "";
-	for(j=-1;j < main_cats.length; j++){
+	for(j=-2;j < main_cats.length; j++){
 		name = main_cats[j];
 		items = categories[name];
-		if(j == -1){
+		if(j == -2){
 			name = "Most Recent";
 			items = categories["all"];
+		}
+		if(j == -1){
+			name = "Advertisements";
+			items = categories["ads"];
 		}
 		if(items != undefined){
 			var curr_car = 1;
 			carousel_currs.push(1);
 			idx = carousel_currs.length - 1;
-			firstHalfHTML = '<div class="row tile-row" style="max-height:150px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:160%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+			if(j == -1){
+				firstHalfHTML = '<div class="row tile-row" style="max-height:80px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:100%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+			}else{
+				firstHalfHTML = '<div class="row tile-row" style="max-height:150px;"><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:150%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+			}
 			html += firstHalfHTML;
 			html += '<div class="item active">';
 			html += '<div class="row">';
 			var size = 11;
 		    	//sets max size of carosel to 15 (4 pages)
-		    if(items.length < 11){
+		    if(items.length < 11 || j == -1){
 		    	size = items.length;
 		    }
 		    carousel_lens.push(size / 4);
@@ -216,10 +254,15 @@ function loadMainCars(){
 		    	} else {
 		    		html += '<div class="col-md-3 fill" id="default">';
 		    	}
-				html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:100%;" />';
-				html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
-				html += '<h4><span>'+items[i].title+'</span></h4>';
-				html += '</div>';
+		    	if(j == -1){
+		    		html += '<a target="_blank" href="'+url+'"><img src="'+items[i].title+'" style="width:100%;" /></a>';
+					html += '</div>';
+		    	}else{
+					html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:100%;" />';
+					html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
+					html += '<h4><span>'+items[i].title+'</span></h4>';
+					html += '</div>';
+				}
 				curr_car += 1;
 				if(curr_car == 5){
 					curr_car = 0;
@@ -240,8 +283,10 @@ function loadMainCars(){
 		    secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div>';
 		    html += secondHalfHTML;
 		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
-		    if(j == -1){
+		    if(j == -2){
 		    	createRecentPage();
+		    }else if(j == -1){
+		    	createAdsPage();
 		    }else{
 		    	createMainPage(name);
 		    }
@@ -295,21 +340,84 @@ function getVidsFromPlaylist(id, title, cat, current, end){
 }
 
 function loadAdCars(allAds){
+	categories["ads"] = [];
+	if(allAdsList.length > 1){
+		title = "img/ads/primary/" + allAdsList[0].split(",")[0];
+    	url = allAdsList[0].split(",")[1];
+		categories["ads"].push({"url": url, "title": title, "time": "0"});
 
+		title = "img/ads/secondary/" + allAdsList[1].split(",")[0];
+    	url = allAdsList[1].split(",")[1];
+		categories["ads"].push({"url": url, "title": title, "time": "0"});
+
+		title = "img/ads/secondary/" + allAdsList[2].split(",")[0];
+    	url = allAdsList[2].split(",")[1];
+		categories["ads"].push({"url": url, "title": title, "time": "0"});
+	}
+	var size = allAds.length;
+    for(i=0;i < size; i++){
+		title = "img/ads/regular/" + allAds[i].split(",")[0];
+    	url = allAds[i].split(",")[1];
+		categories["ads"].push({"url": url, "title": title, "time": "0"});
+	}
+}
+
+function readTextFile(fileStr, allAds)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", fileStr, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                if(!allAds && fileStr.split("primary").length > 1){	//primary ad
+                	var name = allText.split(",")[0];
+                	var url = allText.split(",")[1];
+                	var html = '<a href="'+url+'" target="_blank"><img src="img/ads/primary/'+name+'" style="width:100%;"></a>';
+                	document.getElementById("primary_ad").innerHTML = html;
+                }else if(!allAds && fileStr.split("secondary").length > 1){	//secondary ads
+                	var lines = allText.split("\n");
+                	var name1 = lines[0].split(",")[0];
+                	var name2 = lines[1].split(",")[0];
+                	var url1 = lines[0].split(",")[1];
+                	var url2 = lines[1].split(",")[1];
+                	var html = '<a href="'+url1+'" target="_blank"><img src="img/ads/secondary/'+name1+'" style="width:98%;padding-bottom:10px;"></a><a href="'+url2+'" target="_blank"><img src="img/ads/secondary/'+name2+'" style="width:98%;"></a>';
+                	document.getElementById("secondary_ads").innerHTML = html;
+                }else if(fileStr.split("primary").length > 1){	//primary ads in carosel
+                	allAdsList.push(allText);
+            	}else if(fileStr.split("secondary").length > 1){	//secondary ads in carosel
+                	var lines = allText.split("\n");
+                	allAdsList.push(lines[0]);
+                	allAdsList.push(lines[1]);
+            	}else{
+                	loadAdCars(allText.split("\n"));
+                }
+            }
+        }
+    }
+    rawFile.send(null);
 }
 
 function loadFirstContent(){
 	//check for current live show here
-	live = false
+	live = true
 	//if there is, load live show. load all adds into carosel
 	if(live == true) {
-		html = '<div class=""><div class="row" style="max-height:420px;"><div class="row"><div class="col-md-offset-1"><h2 style="color:white;">Current Live Show</h2></div></div><div class="row tiles"><div class="col-md-10"><div class=""><img src="img/livestream.jpg" style="max-height:400px;"></div></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
-		loadAdCars(true);
+		var html = '<div class=""><div class="row" style="max-height:420px;"><div class="row"><div class="col-md-offset-1"><h2 style="color:white;">Current Live Show</h2></div></div><div class="row tiles"><div class="col-md-10"><div class=""><img src="img/livestream.jpg" style="max-height:400px;"></div></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
+		document.getElementById("content").innerHTML = html;
+		readTextFile("img/ads/primary/ad_list.txt", true);
+		readTextFile("img/ads/secondary/ad_list.txt", true);
+		readTextFile("img/ads/regular/ad_list.txt", true);
 	} else { //if not, load primary adds up top, regular ads in carosel
-		html = '<div class=""><div class="row" style="max-height:420px;margin-top:50px;"><div class="row"><div class="col-md-7" style="margin-left:15px; margin-right:-20px;"><img src="img/ads/primary/CWL-bannerjan.png" style="width:100%;"></div><div class="col-md-5" style="padding-right:55px;"><img src="img/ads/secondary/harmsshowlambs.png" style="width:98%;padding-bottom:10px;"><img src="img/ads/secondary/MacLennanClubLambs.png" style="width:98%;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
-		loadAdCars(false);
+		var html = '<div class=""><div class="row" style="max-height:420px;margin-top:50px;margin-left:20px;"><div class="row"><div id="primary_ad" class="col-md-7" style="margin-left:15px; margin-right:-20px;"></div><div id="secondary_ads" class="col-md-5" style="padding-right:55px;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
+		document.getElementById("content").innerHTML = html;
+		readTextFile("img/ads/primary/ad_list.txt", false);
+		readTextFile("img/ads/secondary/ad_list.txt", false);
+		readTextFile("img/ads/regular/ad_list.txt", false);
 	}
-	document.getElementById("content").innerHTML = html;
 }
 
 window.onload = function() {
