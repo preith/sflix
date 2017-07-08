@@ -1,0 +1,7 @@
+AMAA.png,http://www.maine-anjou.org
+CWL-banner.jpg,http://www.chadwalkerlivestock.com
+earlybird-web.png,http://www.earlybirdgoodfield.com
+Halderman300.jpg,http://www.halderman.com
+nathanclublambs.png,http://www.nathanclublambs.com
+RodgersCattle.png,http://www.rodgerscattle.blogspot.com
+SBFWebcast-services.png,mailto:landree@wlivestock.com

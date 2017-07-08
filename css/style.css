@@ -14,6 +14,8 @@ body {
 div .fill{
 	padding-right:2px;
 	padding-left:2px;
+	height:100%;
+	margin-top:2%;
 	transition: transform .3s ease-out;
 }
 div .fill h4 {
@@ -51,9 +53,9 @@ div#more.fill:hover{
 }
 div.fill:hover h4 { 
 	position: absolute; 
-	bottom: -10;
-	left: 5; 
-	width: 100%; 
+	bottom:30;
+	left:5; 
+	width:100%; 
 	visibility: visible;
 }
 div.fill:hover h4 span{ 
@@ -64,7 +66,7 @@ div.fill:hover h4 span{
 }
 div.fill:hover #play { 
 	position: absolute; 
-	top: 50%;
+	top: 32%;
 	left: 50%;
 	transform: scale(5, 5);
 	-webkit-transition: transform 200 ease-in-out;
@@ -115,7 +117,7 @@ div.fill-sm:hover #play {
 
 div .tiles{
 	padding-left:50px;
-	height: 180px;
+	height:180px;
 }
 
 div .tile-row{
@@ -128,6 +130,33 @@ a:hover {
  cursor:pointer;
 }
 
+div .alertIn{
+	position: fixed;
+	z-index: 2000;
+	visibility: visible;
+}
+
+div .alert{
+	position: fixed;
+	right:30;
+	bottom:10;
+	width:350px;
+	height:100px;
+	visibility: hidden;
+}
+.alert-live {
+  color: white;
+  background-color: #2c74e8;
+  border-color: #2c74e8;
+  visibility: hidden;
+}
+.alert-live hr {
+  border-top-color: #a6e1ec;
+}
+.alert-live .alert-link {
+  color: white;
+}
+
 div .footer {
   position: relative;
   right: 0;
@@ -135,6 +164,4 @@ div .footer {
   left: 0;
   background-color: #222324;
   font-color: white;
-  margin-top:25px;
-  padding-bottom:25px;
 }
