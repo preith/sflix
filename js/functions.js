@@ -439,7 +439,7 @@ function checkForLive(){
 			loadFirstContent(obj.pageInfo.totalResults, obj);
 		}
 	};
-	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UClnQCgFa9lCBL-KXZMOoO9Q&type=video&eventType=live&key="+API_KEY+"", true);
+	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCV6HJBZD_hZcIX9JVJ3dCXQ&type=video&eventType=live&key="+API_KEY+"", true);
 	xhttp.send();
 }
 
@@ -457,15 +457,15 @@ window.onload = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var obj = JSON.parse(this.response);
 				console.log(obj);
-				if(obj.pageInfo.totalResults == currLiveShowNum){
-					document.getElementById("liveAlert").classList.add('alertIn');
+				if(obj.pageInfo.totalResults > currLiveShowNum){
+					document.getElementById("liveAlert").style.visibility = "visible";
 					clearInterval(intervalID);
 				}
 			}
 		};
-		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UClnQCgFa9lCBL-KXZMOoO9Q&type=video&eventType=live&key="+API_KEY+"", true);
+		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCV6HJBZD_hZcIX9JVJ3dCXQ&type=video&eventType=live&key="+API_KEY+"", true);
 		xhttp.send();
-	}, 5000);
+	}, 2000);
 	getPlaylists();
 	pages["social"] = '<br><br><br><div class="col-md-10 col-md-offset-1"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-12"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 }
