@@ -146,3 +146,27 @@ div .footer {
   background-color: #222324;
   font-color: white;
 }
+
+input[type=text] {
+    display:block;
+	margin: 0 0 0 auto;
+    width: 130px;
+    font-size: 16px;
+    border: none;
+    background-color: inherit;
+    background-image: url('../img/searchicon.png');
+    background-position: 10px 14px; 
+    background-size: 25px;
+    background-repeat: no-repeat;
+    padding: 16px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 100%;
+    background-color: #666666;
+    color:white;
+    border-radius: 10px;
+    height:80%;
+}

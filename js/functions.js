@@ -3,6 +3,7 @@ var carousel_lens = [];
 var carousel_currs = [];
 var car_length = 4;
 var API_KEY = "AIzaSyDcxMNdd3HVAC9gFB0OHWGMzN8Rn2f2pjk";
+var chID = "UCvnOcTFOvNxpv7-tUw-B4QA";
 var pages = {};
 var categories = {}; 
 var main_cats = ["Sheep", "Goats", "Pigs", "Cattle"];
@@ -439,8 +440,54 @@ function checkForLive(){
 			loadFirstContent(obj.pageInfo.totalResults, obj);
 		}
 	};
-	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCV6HJBZD_hZcIX9JVJ3dCXQ&type=video&eventType=live&key="+API_KEY+"", true);
+	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+chID+"&type=video&eventType=live&key="+API_KEY+"", true);
 	xhttp.send();
+}
+function createSearchPage(query){
+	console.log("new page")
+	name = "Search Results for " + query + " ...";
+	var html = '<br><br><br><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="col-md-offset-1 col-md-10"><br>';
+
+	var curr_car = 1;
+	items = categories["all"];
+    var size = 25;
+    for(i=0;i < size; i++){
+    	url = items[i].url;
+    	//categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
+    	if(curr_car == 1){
+			html += '<div class="row">';
+    	}
+    	html += '<div class="col-md-3 fill-sm">';
+		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:90%;" /></a>';
+		html += '<img id="play" src="img/play.png" style="width:5%;"></img>';
+		html += '<h4><span>'+items[i].title+'</span></h4>';
+		html += '</div>';
+		curr_car += 1;
+		if(curr_car > 4){
+			curr_car = 1;
+			html += '</div>';
+		}
+    }
+    if(curr_car != 0){
+		html += '</div>';
+    }
+    html += '</div></body>';
+    $('#content').fadeOut("slow", function(){
+	    var replacement = $('<div id="content">'+html+'</div>').hide();
+	    $(this).replaceWith(replacement);
+	    $('#content').fadeIn(500);
+	    window.scrollTo(0,0);
+	});
+}
+function launchSearch(){
+	serachQuery = document.getElementById("searchbar").value;
+	if(serachQuery == ""){
+		openPage("home");
+		return;
+	}else{
+		console.log(serachQuery);
+		createSearchPage(serachQuery);
+	}
 }
 
 window.onload = function() {
@@ -463,7 +510,7 @@ window.onload = function() {
 				}
 			}
 		};
-		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCV6HJBZD_hZcIX9JVJ3dCXQ&type=video&eventType=live&key="+API_KEY+"", true);
+		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+chID+"&type=video&eventType=live&key="+API_KEY+"", true);
 		xhttp.send();
 	}, 2000);
 	getPlaylists();
