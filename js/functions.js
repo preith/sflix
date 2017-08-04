@@ -4,9 +4,10 @@ var carousel_currs = [];
 var car_length = 4;
 var API_KEY = "AIzaSyDcxMNdd3HVAC9gFB0OHWGMzN8Rn2f2pjk";
 var chID = "UCvnOcTFOvNxpv7-tUw-B4QA";
+var tempChId = "UCKn9x42tG-XbocCjWjdVuDg";
 var pages = {};
 var categories = {}; 
-var main_cats = ["Sheep", "Goats", "Pigs", "Cattle"];
+var main_cats = ["Sheep", "Goats", "Pigs", "Cattle", "Commercials"];
 var allAdsList = []
 var currLiveShowNum = 0;
 
@@ -303,7 +304,7 @@ function getPlaylists(){
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
-			//console.log(obj);
+			console.log(obj);
 			for(i=0;i < obj.items.length; i++){
 				var pl = obj.items[i]
 				var id = pl.id;
@@ -440,7 +441,7 @@ function checkForLive(){
 			loadFirstContent(obj.pageInfo.totalResults, obj);
 		}
 	};
-	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+chID+"&type=video&eventType=live&key="+API_KEY+"", true);
+	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+tempChId+"&type=video&eventType=live&key="+API_KEY+"", true);
 	xhttp.send();
 }
 function createSearchPage(query){
@@ -510,7 +511,7 @@ window.onload = function() {
 				}
 			}
 		};
-		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+chID+"&type=video&eventType=live&key="+API_KEY+"", true);
+		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+tempChId+"&type=video&eventType=live&key="+API_KEY+"", true);
 		xhttp.send();
 	}, 2000);
 	getPlaylists();
