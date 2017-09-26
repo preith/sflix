@@ -1,5 +1,6 @@
 html {
   height: 100%;
+  width:100%;
   box-sizing: border-box;
 }
 
@@ -9,8 +10,29 @@ body {
   padding-bottom: 6rem;
   min-height: 100%;
   font-family: "Helvetica Neue", Arial, sans-serif;
+  max-width: 100%;
 }
-
+.navbar-nav{
+	text-align: center;
+}
+div .navbar-header button{
+	top:8;
+	left:15;
+	float:left;
+}
+div .in img{
+	height:90%;
+}
+div .in form{
+	height:90%;
+	margin-top: -10px;
+	margin-bottom: -10px;
+}
+div .in ul a img{
+	height:100%;
+	float:left;
+	bottom:0;
+}
 div .fill{
 	padding-right:2px;
 	padding-left:2px;
@@ -20,6 +42,7 @@ div .fill{
 }
 div .fill h4 {
 	visibility: hidden;
+	overflow:hidden;
 }
 div .fill #play {
 	visibility: hidden;
@@ -53,31 +76,47 @@ div#more.fill:hover{
 }
 div.fill:hover h4 { 
 	position: absolute; 
-	bottom:30;
-	left:5; 
-	width:100%; 
+	bottom:32;
+	left:2; 
+	width:99%;
 	visibility: visible;
+	background-color: rgba(43,44,45, 0.8);
+	overflow:hidden;
+	max-height: 35px;
 }
 div.fill:hover h4 span{ 
 	color: white; 
 	font: bold 18px/32px Helvetica, Sans-Serif; 
 	letter-spacing: -1px; 
 	padding: 10px;
+	overflow:hidden;
 }
 div.fill:hover #play { 
 	position: absolute; 
-	top: 32%;
-	left: 50%;
-	transform: scale(5, 5);
+	top: 39%;
+	left: 46%;
+	transform: scale(4, 4);
 	-webkit-transition: transform 200 ease-in-out;
 	visibility: visible;
 	margin:0;
 	padding:0;
 }
 
+div .tile-row-sm{
+	margin-left:-100px;
+	margin-bottom: 0px;
+	width:120%;
+}
 div .fill-sm{
+	height:200px;
+	overflow: hidden;
 	padding-right:2px;
 	padding-left:2px;
+	transition: transform .3s ease-out;
+}
+div .fill-sm #tile-sm {
+	position:absolute;
+	height:85%;
 }
 div .fill-sm h4 {
 	visibility: hidden;
@@ -93,22 +132,25 @@ div.fill-sm:hover{
 }
 div.fill-sm:hover h4 { 
 	position: absolute; 
-	bottom: -10;
-	left: 5; 
-	width: 100%; 
+	bottom:20;
+	left:2; 
+	width:97%; 
 	visibility: visible;
+	background-color: rgba(43,44,45, 0.8);
+	overflow:hidden;
+	max-height: 35px;
 }
 div.fill-sm:hover h4 span{ 
 	color: white; 
-	font: bold 14px/24px Helvetica, Sans-Serif; 
+	font: bold 18px/32px Helvetica, Sans-Serif; 
 	letter-spacing: -1px; 
 	padding: 10px;
 }
 div.fill-sm:hover #play { 
 	position: absolute; 
-	top: 48%;
-	left: 42%;
-	transform: scale(5, 5);
+	top: 39%;
+	left: 46%;
+	transform: scale(4, 4);
 	-webkit-transition: transform 200 ease-in-out;
 	visibility: visible;
 	margin:0;
@@ -125,17 +167,20 @@ div .tile-row{
 	margin-bottom: 0px;
 	height:100%;
 }
+div .tiles-mobile{
+	padding-left:50px;
+	height:80px;
+}
+
+div .tile-row-mobile{
+	margin-left:-50px;
+	margin-bottom: 0px;
+	height:50%;
+	overflow-x:scroll;
+}
 
 a:hover {
  cursor:pointer;
-}
-
-.alert-live {
-	position: fixed;
-	right:25;
-	bottom:0;
-	width:300px;
-	z-index: 6000;
 }
 
 div .footer {
@@ -153,14 +198,29 @@ input[type=text] {
     width: 130px;
     font-size: 16px;
     border: none;
+    color: white;
     background-color: inherit;
     background-image: url('../img/searchicon.png');
-    background-position: 10px 14px; 
-    background-size: 25px;
+    background-position: 10px 16px; 
+    background-size: 22px;
     background-repeat: no-repeat;
     padding: 16px 20px 12px 40px;
     -webkit-transition: width 0.4s ease-in-out;
     transition: width 0.4s ease-in-out;
+}
+::-webkit-input-placeholder { /* Chrome */
+  color: white;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: white;
+  opacity: 1;
+}
+:-moz-placeholder { /* Firefox 4 - 18 */
+  color: white;
+  opacity: 1;
 }
 
 input[type=text]:focus {
@@ -169,4 +229,5 @@ input[type=text]:focus {
     color:white;
     border-radius: 10px;
     height:80%;
+    outline-width: 0;
 }

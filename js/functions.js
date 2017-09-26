@@ -10,6 +10,7 @@ var categories = {};
 var main_cats = ["Sheep", "Goats", "Pigs", "Cattle", "Commercials"];
 var allAdsList = []
 var currLiveShowNum = 0;
+var mobile_device = false;
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -38,10 +39,10 @@ function createRecentPage(){
     	url = items[i].url;
     	//categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
     	if(curr_car == 1){
-			html += '<div class="row">';
+			html += '<div class="tile-row-sm row" max-height:180px;>';
     	}
     	html += '<div class="col-md-3 fill-sm">';
-		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:90%;" /></a>';
+		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img id="tile-sm" src="http://img.youtube.com/vi/'+url+'/mqdefault.jpg" /></a>';
 		html += '<img id="play" src="img/play.png" style="width:5%;"></img>';
 		html += '<h4><span>'+items[i].title+'</span></h4>';
 		html += '</div>';
@@ -69,10 +70,10 @@ function createAdsPage(){
     	url = items[i].url;
     	src = items[i].title;
     	if(curr_car == 1){
-			html += '<div class="row" style="margin-bottom:25px;">';
+			html += '<div class="tile-row-sm row" style="margin-bottom:25px;" max-height:180px;>';
     	}
     	html += '<div class="col-md-3 fill-sm">';
-		html += '<a target="_blank" href="'+url+'"><img src="'+src+'" style="width:90%;" /></a>';
+		html += '<a target="_blank" href="'+url+'"><img id="tile-sm" src="'+src+'" /></a>';
 		html += '</div>';
 		curr_car += 1;
 		if(curr_car > 4){
@@ -168,7 +169,7 @@ function createPage(name, items, category){
     	url = items[i].url;
     	//categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
     	if(curr_car == 1){
-			html += '<div class="row">';
+			html += '<div class="tile-row-sm row">';
     	}
     	html += '<div class="col-md-3 fill-sm">';
 		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/mqdefault.jpg" style="width:90%;" /></a>';
@@ -210,7 +211,67 @@ function openPage(name){
 	    window.scrollTo(0,0);
 	});
 }
-
+function loadMainCarsMobile(){
+	var html = "";
+	for(j=-2;j < main_cats.length; j++){
+		name = main_cats[j];
+		items = categories[name];
+		if(j == -2){
+			name = "Most Recent";
+			items = categories["all"];
+		}
+		if(j == -1){
+			name = "Advertisements";
+			items = categories["ads"];
+		}
+		if(items != undefined){
+			var curr_car = 1;
+			carousel_currs.push(1);
+			idx = carousel_currs.length - 1;
+			if(j == -1){
+				firstHalfHTML = '<div class="row tile-row-mobile" style="max-height:80px;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="row tiles-mobile"><div class="col-xs-12" style="height:110%;">';
+			}else{
+				firstHalfHTML = '<div class="row tile-row-mobile" style="max-height:80px;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="row tiles-mobile"><div class="col-xs-12" style="height:90%;">';
+			}
+			html += firstHalfHTML;
+			html += '<div class="item active">';
+			html += '<div class="row">';
+			var size = 7;
+		    	//sets max size of carosel to 7 (4 pages)
+		    if(items.length < 7 || j == -1){
+		    	size = items.length;
+		    }
+		    carousel_lens.push(size / 2);
+		    for(i=0;i < size; i++){
+		    	//console.log(playList.items[i]);
+		    	url = items[i].url;
+		    	html += '<div class="col-xs-6" id="default">';
+		    	if(j == -1){
+		    		html += '<a target="_blank" href="'+url+'"><img src="'+items[i].title+'" style="width:100%;" /></a>';
+					html += '</div>';
+		    	}else{
+					html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/mqdefault.jpg" style="width:100%;" />';
+					html += '</a>';
+					html += '<div class="media-body"><p class="media-heading"><span>'+items[i].title+'</span></p></div>';
+					html += '</div>';
+				}
+		    }
+		    html += '<div class="col-xs-6" id="more">';
+			html += '<a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos"><img src="img/more.png" style="width:100%;" /></a>';
+			html += '</div>';
+		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
+		    if(j == -2){
+		    	createRecentPage();
+		    }else if(j == -1){
+		    	createAdsPage();
+		    }else{
+		    	createMainPage(name);
+		    }
+		}
+	}
+	document.getElementById("cars").innerHTML = html;
+	pages["home"] = document.getElementById("content").innerHTML;
+}
 function loadMainCars(){
 	var html = "";
 	for(j=-2;j < main_cats.length; j++){
@@ -304,14 +365,12 @@ function getPlaylists(){
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
-			console.log(obj);
+			//console.log(obj);
 			for(i=0;i < obj.items.length; i++){
 				var pl = obj.items[i]
 				var id = pl.id;
 				var title = pl.snippet.title;
 				var cat = title.split(" - ")[1];
-				//title = title.split(" - ")[0];
-				//console.log(cat);
 				if(cat != undefined){
 					if(categories[cat] == undefined){
 						categories[cat] = [];
@@ -333,7 +392,11 @@ function getVidsFromPlaylist(id, title, cat, current, end){
 			if(obj.items.length > 0){
 				organizeVideos(title, obj, cat);
 				if(current == end){
-					loadMainCars();
+					if(mobile_device){
+						loadMainCarsMobile();
+					}else{
+						loadMainCars();
+					}
 				}
 			}
 		}
@@ -420,46 +483,43 @@ function loadFirstContent(numLive, obj){
 		var vidTitle = obj.items[0].snippet.title;
 		var html = '<div class=""><div class="row" style="max-height:420px; margin-top:50px;"><div class="row"><div class="col-md-offset-1"><h2 style="color:white;">'+title+'</h2></div></div><div class="row"><div class="col-md-9 col-md-offset-1"><div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item"  src="https://www.youtube.com/embed/'+url+'?autoplay=1"></iframe></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
 		document.getElementById("content").innerHTML = html;
-		readTextFile("img/ads/primary/ad_list.txt", true);
-		readTextFile("img/ads/secondary/ad_list.txt", true);
-		readTextFile("img/ads/regular/ad_list.txt", true);
+		//readTextFile("img/ads/primary/ad_list.txt", true);
+		//readTextFile("img/ads/secondary/ad_list.txt", true);
+		//readTextFile("img/ads/regular/ad_list.txt", true);
 	} else { //if not, load primary adds up top, regular ads in carosel
 		var html = '<div class=""><div class="row" style="max-height:420px;margin-top:50px;margin-left:100px;"><div class="row"><div id="primary_ad" class="col-md-7" style="margin-left:15px; margin-right:-20px;"></div><div id="secondary_ads" class="col-md-4" style="padding-right:55px;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
 		document.getElementById("content").innerHTML = html;
-		readTextFile("img/ads/primary/ad_list.txt", false);
-		readTextFile("img/ads/secondary/ad_list.txt", false);
-		readTextFile("img/ads/regular/ad_list.txt", false);
+		//readTextFile("img/ads/primary/ad_list.txt", false);
+		//readTextFile("img/ads/secondary/ad_list.txt", false);
+		//readTextFile("img/ads/regular/ad_list.txt", false);
 	}
 }
 
-function checkForLive(){
+function getChannelInfo(){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
-			currLiveShowNum = obj.pageInfo.totalResults;
+			//currLiveShowNum = obj.pageInfo.totalResults;
 			loadFirstContent(obj.pageInfo.totalResults, obj);
 		}
 	};
 	xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+tempChId+"&type=video&eventType=live&key="+API_KEY+"", true);
 	xhttp.send();
 }
-function createSearchPage(query){
-	console.log("new page")
-	name = "Search Results for " + query + " ...";
+function createSearchPage(query, items){
+	name = "Search results for \"" + query + "...\"";
 	var html = '<br><br><br><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="col-md-offset-1 col-md-10"><br>';
 
 	var curr_car = 1;
-	items = categories["all"];
-    var size = 25;
+    var size = items.length;
     for(i=0;i < size; i++){
     	url = items[i].url;
-    	//categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
     	if(curr_car == 1){
-			html += '<div class="row">';
+			html += '<div class="tile-row-sm row" max-height:180px;>';
     	}
     	html += '<div class="col-md-3 fill-sm">';
-		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="http://img.youtube.com/vi/'+url+'/hqdefault.jpg" style="width:90%;" /></a>';
+		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img id="tile-sm" src="http://img.youtube.com/vi/'+url+'/mqdefault.jpg" /></a>';
 		html += '<img id="play" src="img/play.png" style="width:5%;"></img>';
 		html += '<h4><span>'+items[i].title+'</span></h4>';
 		html += '</div>';
@@ -480,15 +540,53 @@ function createSearchPage(query){
 	    window.scrollTo(0,0);
 	});
 }
-function launchSearch(){
-	serachQuery = document.getElementById("searchbar").value;
+$(document).ready(function() {
+	var timeoutID = null;
+
+	$('#searchbar').keyup(function(e) {
+		clearTimeout(timeoutID);
+		timeoutID = setTimeout(launchSearch.bind(undefined, e.target.value), 500);
+	});
+
+});
+
+function getSearchItems(serachQuery){
+	serachQuery = serachQuery.toLowerCase();
+	allItems = categories["all"];
+	searchItems = []
+	var size = allItems.length;
+	for(i=0;i < size; i++){
+		item = allItems[i];
+		title = item.title.toLowerCase();
+		if(title.includes(serachQuery)){
+			searchItems.push(item);
+		}
+	}
+	return searchItems;
+}
+function launchSearch(serachQuery){
 	if(serachQuery == ""){
 		openPage("home");
 		return;
 	}else{
-		console.log(serachQuery);
-		createSearchPage(serachQuery);
+		items = getSearchItems(serachQuery);
+		if(items.length > 0){
+			createSearchPage(serachQuery, items);
+		}else{
+			name = "No results found for \"" + serachQuery + "\"";
+			var html = '<br><br><br><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="col-md-offset-1 col-md-10"><br>';
+		    html += '<div style="height:80vh;"><br><div class="col-md-6 col-md-offset-5"><img height="40%" src="img/searchicon.png"/></div></div></div></body>';
+		    $('#content').fadeOut("slow", function(){
+			    var replacement = $('<div id="content">'+html+'</div>').hide();
+			    $(this).replaceWith(replacement);
+			    $('#content').fadeIn(500);
+			    window.scrollTo(0,0);
+			});
+		}
 	}
+}
+function dummyFunction(){
+	return false;
 }
 
 window.onload = function() {
@@ -496,10 +594,9 @@ window.onload = function() {
 	$(function () {
 		$('[data-toggle="popover"]').popover({html:true})
 	})
-
 	categories["all"] = [];
-	checkForLive();
-	var intervalID = setInterval(function(){
+	getChannelInfo();
+	/*var intervalID = setInterval(function(){
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -513,7 +610,11 @@ window.onload = function() {
 		};
 		xhttp.open("GET", "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+tempChId+"&type=video&eventType=live&key="+API_KEY+"", true);
 		xhttp.send();
-	}, 2000);
+	}, 2000);*/
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		mobile_device = true;
+	}else{
+		pages["social"] = '<br><br><br><div class="col-md-10 col-md-offset-1"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-12"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
+	}
 	getPlaylists();
-	pages["social"] = '<br><br><br><div class="col-md-10 col-md-offset-1"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-12"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 }
