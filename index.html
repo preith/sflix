@@ -1,6 +1,6 @@
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
@@ -8,10 +8,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="js/functions.js"></script>
 </head>
-<body style="background-color:#2b2c2d">
-<div>
+<body id="body" style="background-color:#2b2c2d">
+<div class="header">
 	<div class="row" style="background-color:#2b2c2d">
-	<nav id="nav_bar" class="navbar-grad navbar-default navbar-fixed-top visible-phone" style="background-color:#2b2c2d;">
+	<nav id="nav_bar" class="navbar-grad navbar-default navbar-fixed-top visible-phone" style="background-color:#2b2c2d;width:100%;">
   	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
@@ -20,7 +20,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" stlye="margin-bottom:-10px;" onclick="openPage('home')"><img class="col-xs-offset-3" alt="Brand" height="180%" src="img/logo.png"/></a>
+			<a class="navbar-brand" stlye="margin-bottom:-10px;" onclick="openPage('home')"><img class="col-xs-offset-8 col-md-offset-1" alt="Brand" height="180%" src="img/logo.png"/></a>
 	    </div>
     <!-- Brand and toggle get grouped for better mobile display -->
 
@@ -39,10 +39,10 @@
 	      	</li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><form class="col-xs-8" onsubmit="dummyFunction(); return false;">
+	        <li><form class="col-xs-9 col-md-12" onsubmit="dummyFunction(); return false;">
 				<input onfocus="this.select();" id="searchbar" type="text" name="search" placeholder="Search">
 			</form></li>
-	        <li><a class="navbar-brand col-xs-8 col-xs-offset-3" href="https://www.wlivestock.com"><img alt="Brand" height="180%" src="img/wlivestock.png"/></a></li>
+	        <li><a class="navbar-brand col-xs-8 col-xs-offset-4 col-md-offset-0" href="https://www.wlivestock.com"><img alt="Brand" height="180%" src="img/wlivestock.png"/></a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -52,31 +52,33 @@
 </div>
 <div id="content">
 </div>
-<div class="footer" style="padding-bottom:100px;">
-	<div class="col-md-12 col-xs-12" style="color:white;background-color:#222324;">
-		<br>
-		<div class="col-md-6 col-xs-12">
-			<div class="col-md-5 col-xs-12">
-				<div class="col-md-3 col-xs-3">
-				<a target="_blank" href="https://www.facebook.com/showbarnflix/"><img height="10%" src="img/fb.png"></a>
-				</div>
-				<div class="col-md-3 col-xs-3">
-				<a target="_blank" href="https://twitter.com/showbarnflix"><img height="10%" src="img/twit.png"></a>
-				</div>
-				<div class="col-md-3 col-xs-3">
-				<a target="_blank" href="https://www.youtube.com/channel/UCvnOcTFOvNxpv7-tUw-B4QA"><img height="10%" src="img/yt.png"></a>
-				</div>
-				<div class="col-md-3 col-xs-3">
-				<a target="_blank" href="https://www.instagram.com/showbarnflix/"><img height="10%" src="img/insta.png"></a>
+<div class="footer" id="foot">
+	<nav class="navbar fixed-bottom navbar-light bg-faded">
+		<div class="col-md-12 col-sm-12 col-xs-12" style="color:white;background-color:#222324;">
+			<br>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-6 col-sm-12 col-xs-12">
+					<div class="col-md-3 col-sm-3 col-xs-3">
+					<a target="_blank" href="https://www.facebook.com/showbarnflix/"><img height="15%" src="img/fb.png"></a>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+					<a target="_blank" href="https://twitter.com/showbarnflix"><img height="15%" src="img/twit.png"></a>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+					<a target="_blank" href="https://www.youtube.com/channel/UCvnOcTFOvNxpv7-tUw-B4QA"><img height="15%" src="img/yt.png"></a>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+					<a target="_blank" href="https://www.instagram.com/showbarnflix/"><img height="15%" src="img/insta.png"></a>
+					</div>
 				</div>
 			</div>
+			<div class="col-md-6 col-sm-6 col-xs-12" style="text-align:right;color:white;">
+				© Copyright 2016 ShowBarnFlix.com | Sponsored by <a target="_blank" href="https://www.wlivestock.com" style="color:white;">Willoughby Sales</a>
+				<br>
+				<a href="mailto:landree@wlivestock.com" style="color:white;">landree@wlivestock.com</a> | <a style="color:white;" href="tel:303-519-1166">(303) 519-1166</a>
+				<p>&nbsp</p>
+			</div>
 		</div>
-		<div class="col-md-6 col-xs-12" style="text-align:right;color:white;">
-			© Copyright 2016 ShowBarnFlix.com | Sponsored by <a target="_blank" href="https://www.wlivestock.com" style="color:white;">Willoughby Sales</a>
-			<br>
-			<a href="mailto:landree@wlivestock.com" style="color:white;">landree@wlivestock.com</a> | <a style="color:white;" href="tel:303-519-1166">(303) 519-1166</a>
-			<p>&nbsp</p>
-		</div>
-	</div>
+	</nav>
 </div>
 </body>
