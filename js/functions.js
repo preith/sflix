@@ -59,7 +59,7 @@ function createRecentPage(){
     	url = items[i].url;
     	//categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
     	if(curr_car == 1){
-			html += '<div class="tile-row-sm row" max-height:180px;>';
+			html += '<div class="tile-row-sm row">';
     	}
     	html += '<div class="col-md-3 fill-sm">';
 		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img id="tile-sm" src="https://img.youtube.com/vi/'+url+'/mqdefault.jpg" /></a>';
@@ -108,7 +108,7 @@ function createAdsPage(){
     	url = items[i-1].url;
     	src = items[i-1].title;
     	if(curr_car == 1){
-			html += '<div class="tile-row-mobile row" style="margin-bottom:25px;" max-height:180px;>';
+			html += '<div class="tile-row-mobile row" style="margin-bottom:25px;">';
     	}
     	html += '<div class="col-md-3 fill-sm">';
 		html += '<a target="_blank" href="'+url+'"><img id="tile-sm" src="'+src+'" /></a>';
@@ -176,7 +176,7 @@ function createMainPage(mainName){
 				carousel_currs.push(1);
 				idx = carousel_currs.length - 1;
 				name = property.split(" - ")[0];
-				firstHalfHTML = '<div class="row tile-row" style="max-height:120px;"><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row tile-row" style=""><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'_'+mainName+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;""><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 				secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div>';
 				html += firstHalfHTML;
 				html += '<div class="item active">';
@@ -285,7 +285,7 @@ function createPage(name, items, category){
 		html += '</div>';
     }
     html += '</div></body>';
-    pages[name.replace(/ /g, "_")] = html;
+    pages[name.replace(/ /g, "_")+'_'+category] = html;
 }
 
 function organizeVideos(name, playList, cat){
@@ -388,9 +388,9 @@ function loadMainCars(){
 			carousel_currs.push(1);
 			idx = carousel_currs.length - 1;
 			if(j == -1){
-				firstHalfHTML = '<div class="row tile-row" style="max-height:80px;"><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:110%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row tile-row" style=""><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:110%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}else{
-				firstHalfHTML = '<div class="row tile-row" style="max-height:120px;"><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row tile-row" style=""><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}
 			html += firstHalfHTML;
 			html += '<div class="item active">';
@@ -584,13 +584,13 @@ function loadFirstContent(numLive, obj){
 		}
 		var url = obj.items[0].id.videoId;
 		var vidTitle = obj.items[0].snippet.title;
-		var html = '<div class=""><div class="row" style="max-height:420px; margin-top:50px;"><div class="row"><div class="col-md-offset-1"><h2 style="color:white;">'+title+'</h2></div></div><div class="row"><div class="col-md-9 col-md-offset-1"><div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item"  src="https://www.youtube.com/embed/'+url+'?autoplay=1"></iframe></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
+		var html = '<div class=""><div class="row" style="margin-top:50px;"><div class="row"><div class="col-md-offset-1"><h2 style="color:white;">'+title+'</h2></div></div><div class="row"><div class="col-md-9 col-md-offset-1"><div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item"  src="https://www.youtube.com/embed/'+url+'?autoplay=1"></iframe></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
 		document.getElementById("content").innerHTML = html;
 		//readTextFile("img/ads/primary/ad_list.txt", true);
 		//readTextFile("img/ads/secondary/ad_list.txt", true);
 		//readTextFile("img/ads/regular/ad_list.txt", true);
 	} else { //if not, load primary adds up top, regular ads in carosel
-		var html = '<div class=""><div class="row" style="max-height:420px;margin-top:50px;margin-left:100px;"><div class="row"><div id="primary_ad" class="col-md-7" style="margin-left:15px; margin-right:-20px;"></div><div id="secondary_ads" class="col-md-4" style="padding-right:55px;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
+		var html = '<div class=""><div class="row" style="margin-top:50px;margin-left:100px;"><div class="row"><div id="primary_ad" class="col-md-7" style="margin-left:15px; margin-right:-20px;"></div><div id="secondary_ads" class="col-md-4" style="padding-right:55px;"></div></div></div></div><div id="cars" class="" class="col-md-12"></div>';
 		document.getElementById("content").innerHTML = html;
 		//readTextFile("img/ads/primary/ad_list.txt", false);
 		//readTextFile("img/ads/secondary/ad_list.txt", false);
@@ -619,7 +619,7 @@ function createSearchPage(query, items){
     for(i=0;i < size; i++){
     	url = items[i].url;
     	if(curr_car == 1){
-			html += '<div class="tile-row-sm row" max-height:180px;>';
+			html += '<div class="tile-row-sm row">';
     	}
     	html += '<div class="col-md-3 fill-sm">';
 		html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img id="tile-sm" src="https://img.youtube.com/vi/'+url+'/mqdefault.jpg" /></a>';
@@ -721,8 +721,12 @@ window.onload = function() {
 		var foot_html = '<nav class="navbar fixed-bottom navbar-light bg-faded"><div class="col-md-12 col-sm-12 col-xs-12" style="color:white;background-color:#222324;"><br><div class="col-md-8 col-sm-8 col-xs-12"><div class="col-md-12 col-sm-12 col-xs-12"><div class="col-md-3 col-sm-3 col-xs-3"><a target="_blank" href="https://www.facebook.com/showbarnflix/"><img height="10%" src="img/fb.png"></a></div><div class="col-md-3 col-sm-3 col-xs-3"><a target="_blank" href="https://twitter.com/showbarnflix"><img height="10%" src="img/twit.png"></a></div><div class="col-md-3 col-sm-3 col-xs-3"><a target="_blank" href="https://www.youtube.com/channel/UCvnOcTFOvNxpv7-tUw-B4QA"><img height="10%" src="img/yt.png"></a></div><div class="col-md-3 col-sm-3 col-xs-3"><a target="_blank" href="https://www.instagram.com/showbarnflix/"><img height="10%" src="img/insta.png"></a></div></div></div><div class="col-md-4 col-sm-6 col-xs-12" style="text-align:right;color:white;">© Copyright 2016 ShowBarnFlix.com | Sponsored by <a target="_blank" href="https://www.wlivestock.com" style="color:white;">Willoughby Sales</a><br><a href="mailto:landree@wlivestock.com" style="color:white;">landree@wlivestock.com</a> | <a style="color:white;" href="tel:303-519-1166">(303) 519-1166</a><p>&nbsp</p></div></div></nav>';
 		document.getElementById("foot").innerHTML = foot_html;
 	}else{
-		pages["social"] = '<br><br><br><div class="col-md-10 col-md-offset-1"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-12"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
+		pages["social"] = '<br><br><br><div class="col-md-10 col-md-offset-1"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-12"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 		document.getElementById("content").style = "position:relative;margin-top:6%;";
 	}
 	getPlaylists();
+
+	var intervalID = setInterval(function(){
+		console.log(pages);
+	}, 5000);
 }
