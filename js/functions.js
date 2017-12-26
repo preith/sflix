@@ -13,7 +13,12 @@ var currLiveShowNum = 0;
 var mobile_device = false;
 var vidsRecieved = 0;
 
-var liveLinks = ["https://www.google.com"];
+var liveLinks = [];
+
+	//just for testing
+for (i = 0; i < 0; i++){
+	liveLinks[i] = "https://www.youtube.com/embed/ka3S94yaWeg";
+}
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -404,9 +409,9 @@ function loadMainCars(){
 			carousel_currs.push(1);
 			idx = carousel_currs.length - 1;
 			if(j == -1){
-				firstHalfHTML = '<div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:110%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:110%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}else{
-				firstHalfHTML = '<div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div style="margin-bottom:-25px;" class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}
 			html += firstHalfHTML;
 			html += '<div class="item active">';
@@ -458,7 +463,7 @@ function loadMainCars(){
 		    	html += '</div>';
 				html += '</div>';
 		    }
-		    secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div></div>';
+		    secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div></div></div>';
 		    html += secondHalfHTML;
 		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
 		    if(j == -2){
@@ -595,22 +600,59 @@ function readTextFile(fileStr, allAds)
 }
 
 function loadLive(){
-	var live1_1 = '<div id="live1"><div class="row"><div class="col-md-offset-1 col-md-3"><h2 style="color:white;">Example Title</h2></div></div><div class="row"><div class="col-md-offset-1 col-md-8" style="background-color:red;height:95%;"><iframe>';
-	var live1_2 = '</iframe></div></div></div>';
-
-
 	var numLive = liveLinks.length;
+	var title = "Live Show";
+	if(numLive > 1){
+		title = "Live Shows";
+	}
+	var head = '<div class="row"><div class="col-md-offset-1 col-md-3"><h2 style="color:white;">'+title+'</h2></div></div>';
+	var live1 = ['<div id="live1">','<div class="row"><div class="col-md-offset-1 col-md-7" style="height:80%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>'];
+	var live2 = ['<div id="live2">','<div class="row"><div class="col-md-offset-1 col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>'];
+	var live3 = ['<div id="live3">','<div class="row"><div class="col-md-offset-1 col-md-6" style="padding:5;height:74%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="margin-right:-200px;"><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div></div></div>'];
+
+	var html = "";
+	var linkCt = 0;
 	if(numLive == 0){
 		//maybe put banner ads here?
 		return;
-	}else if(numLive == 1){
-		//maybe put side ads next to live vid?
-		var link = liveLinks[0];
-		var html = live1_1 + link + live1_2;
 	}else{
 		//need to loop or something
-		//could look for % 3 first, then do 0, 1, or 2 and then all groups of 3 after
+		//could look for % 3 first, then do 1, or 2 and then all groups of 3 after
+			//one at top
+		if(numLive == 4){
+			html += live2[0] + head + live2[1] + liveLinks[0] + live2[2]+ liveLinks[1] + live2[3];
+			html += live2[0] + live2[1] + liveLinks[2] + live2[2]+ liveLinks[3] + live2[3];
+			numLive = 0;
+		}else if((numLive % 3) == 1){
+			//maybe put side ads next to live vid?
+			html += live1[0] + head + live1[1] + liveLinks[0] + live1[2];
+			linkCt += 1;
+			//two at top
+		}else if((numLive % 3) == 2){
+			html += live2[0] + head + live2[1] + liveLinks[0] + live2[2]+ liveLinks[1] + live2[3];
+			linkCt += 2;
+		}
+
+			//then loop through all groups of 3 lefts
+		length = Math.floor((numLive / 3));
+		for(var i = 0; i < length; i++){
+			if(numLive % 3 == 0 && i == 0){
+				html += live3[0] + head;
+				html += live3[1] + liveLinks[linkCt++];
+				html += live3[2] + liveLinks[linkCt++];
+				html += live3[3] + liveLinks[linkCt++];
+				html += live3[4];
+			}else{
+				html += live3[0] + live3[1] + liveLinks[linkCt++];
+				html += live3[2] + liveLinks[linkCt++];
+				html += live3[3] + liveLinks[linkCt++];
+				html += live3[4];
+
+			}
+		} 
 	}
+	document.getElementById("content").innerHTML = html + document.getElementById("content").innerHTML;
+	pages["home"] = document.getElementById("content").innerHTML;
 }
 
 function createSearchPage(query, items){
