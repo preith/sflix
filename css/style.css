@@ -129,8 +129,26 @@ div .fill-sm h4 {
 div .fill-sm #play {
 	visibility: hidden;
 }
-div.fill-sm:hover{
+div#default.fill-sm:hover{
 	transform: scale(1.2, 1.2);
+	-ms-transform: scale(1.2, 1.2); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2); /* Safari */
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div#first.fill-sm:hover{
+	transform: scale(1.2, 1.2) translateX(30px);
+	-ms-transform: scale(1.2, 1.2) translateX(30px); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2) translateX(30px); /* Safari */
+	-webkit-transition: transform 200 ease-in-out;
+	position: relative;
+	z-index: 1000;
+}
+div#last.fill-sm:hover{
+	transform: scale(1.2, 1.2) translateX(-30px);
+	-ms-transform: scale(1.2, 1.2) translateX(-30px); /* IE 9 */
+    -webkit-transform: scale(1.2, 1.2) translateX(-30px); /* Safari */
 	-webkit-transition: transform 200 ease-in-out;
 	position: relative;
 	z-index: 1000;
@@ -139,7 +157,7 @@ div.fill-sm:hover h4 {
 	position: absolute; 
 	bottom:20;
 	left:2; 
-	width:97%; 
+	width:95%; 
 	visibility: visible;
 	background-color: rgba(43,44,45, 0.8);
 	overflow:hidden;
@@ -170,7 +188,6 @@ div .tiles{
 div .tile-row{
 	margin-left:-50px;
 	margin-bottom: 0px;
-	height:100%;
 }
 div .tiles-mobile{
 	padding-left:50px;
@@ -214,6 +231,11 @@ div .footer {
   left: 0;
   background-color: #222324;
   font-color: white;
+}
+
+#content {
+	position: relative;
+	margin-top: 6%;
 }
 
 input[type=text] {
