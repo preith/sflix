@@ -595,25 +595,22 @@ function readTextFile(fileStr, allAds)
 }
 
 function loadLive(){
-	var live1 = '<div id="live1"><div class="row"><div class="col-md-offset-1 col-md-3"><h2 style="color:white;">Example Title</h2></div></div><div class="row"><div class="col-md-offset-1 col-md-8" style="background-color:red;height:95%;"><iframe></iframe></div></div></div>';
+	var live1_1 = '<div id="live1"><div class="row"><div class="col-md-offset-1 col-md-3"><h2 style="color:white;">Example Title</h2></div></div><div class="row"><div class="col-md-offset-1 col-md-8" style="background-color:red;height:95%;"><iframe>';
+	var live1_2 = '</iframe></div></div></div>';
+
 
 	var numLive = liveLinks.length;
-	if(numLive == 1){
+	if(numLive == 0){
+		//maybe put banner ads here?
+		return;
+	}else if(numLive == 1){
+		//maybe put side ads next to live vid?
 		var link = liveLinks[0];
-		var html;
+		var html = live1_1 + link + live1_2;
 	}else{
-		switch (numLive % 3){
-			case 1:  			//example 5, 7
-			break;
-
-			case 2: 			//example 4, 8
-			break;
-
-			case 0: 			//example 6, 9
-			break;
-		}
+		//need to loop or something
+		//could look for % 3 first, then do 0, 1, or 2 and then all groups of 3 after
 	}
-
 }
 
 function createSearchPage(query, items){
