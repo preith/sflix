@@ -208,9 +208,9 @@ div .tile-mobile{
 
 div .tile-row-mobile{
 	margin-left:-50px;
-	margin-bottom: 0px;
-	height:100%;
+	height:45%;
 	overflow:hidden;
+	display:inline-block;
 }
 
 div .tile-tile-mobile{
@@ -236,6 +236,10 @@ div .footer {
 #content {
 	position: relative;
 	margin-top: 6%;
+}
+#content-mobile {
+	position: relative;
+	margin-top: 14%;
 }
 
 input[type=text] {
