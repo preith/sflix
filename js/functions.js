@@ -14,11 +14,6 @@ var vidsRecieved = 0;
 
 var liveLinks = [];
 
-	//just for testing
-for (i = 0; i < 2; i++){
-	liveLinks[i] = "https://www.youtube.com/embed/ka3S94yaWeg";
-}
-
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
 	document.getElementById(""+id+"_carousel_prev").style.display = "block";
@@ -143,12 +138,9 @@ function createMobileMainPage(mainName){
 
 	var curr_car = 1;
     var size = categories.length;
-    //console.log(categories);
     for (var property in categories) {
-    	//console.log(property);
 	    if (categories.hasOwnProperty(property)) {
 	    	if(property.split(" - " + mainName).length > 1){
-	    		//console.log(property);
 	    		var items = categories[property];
 				var size = 8;
 			    	//sets max size of carosel to 15 (4 pages)
@@ -202,7 +194,6 @@ function createMainPage(mainName){
 			    }
 			    carousel_lens.push(size / 4);
 			    for(i=0;i < size; i++){
-			    	//console.log(playList.items[i]);
 			    	url = items[i].url;
 			    	if(curr_car == 0){
 			    		html += '<div class="item">';
@@ -250,8 +241,6 @@ function createMainPage(mainName){
 }
 function createMobilePage(name, items, category){
 	var html = '<div class="row"><div class="col-xs-3 col-sm-3"><a onclick="openPage(\''+category+'\')" title="Back to '+category+'"><img style="width:80%;margin-left:10%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">'+name+'</h2></div></div><br>';
-	//console.log("createPage");
-	//console.log(items);
     var size = items.length;
     var hgt = 16*size;
     if(size % 2 == 1){
@@ -318,7 +307,6 @@ function organizeVideos(name, playList, cat){
     categories["all"].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
     categories[cat].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
     categories[name].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
-    //console.log(categories);
 }
 
 function openPage(name){
@@ -371,7 +359,6 @@ function loadMainCarsMobile(){
 			}
 			html += firstHalfHTML;
 		    for(i=0;i < size; i++){
-		    	//console.log(playList.items[i]);
 		    	url = items[i].url;
 		    	html += '<div class="col-xs-2 tile-mobile" id="default">';
 		    	if(j == -1){
@@ -432,7 +419,6 @@ function loadMainCars(){
 		    }
 		    carousel_lens.push(size / 4);
 		    for(i=0;i < size; i++){
-		    	//console.log(playList.items[i]);
 		    	url = items[i].url;
 		    	if(curr_car == 0){
 		    		html += '<div class="item">';
@@ -516,7 +502,6 @@ function getPlaylists(){
 					}
 					categories[title] = [];
 					getVidsFromPlaylist(id, title, cat, total);
-					//console.log(mainCats);
 				}
 			}
 		}
@@ -820,7 +805,6 @@ window.onload = function() {
 	$(document).ready(function () {
 	    $(document).click(function (event) {
 	        var clickover = $(event.target);
-	        console.log(clickover);
 	        var _opened = $(".navbar-collapse").hasClass("navbar-collapse collapse in");
 	        if (_opened === true && !clickover.hasClass("navbar-toggle") && (clickover[0].id != "noClose") && (clickover[0].id != "searchbar")) {
 	            $("button.navbar-toggle").click();
