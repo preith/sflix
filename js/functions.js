@@ -360,7 +360,7 @@ function loadMainCarsMobile(){
 			if(j == -1){
 				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:10%;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
 			}else{
-				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:35%;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:40%;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
 			}
 			html += firstHalfHTML;
 		    for(i=0;i < size; i++){
@@ -778,7 +778,9 @@ window.onload = function() {
 	    });
 	});
 	categories["all"] = [];
-	if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+	console.log(navigator.userAgent);
+	console.log(window.screen.availHeight, window.screen.availWidth);
+	if(/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !(window.screen.availWidth > 1000)) {
 		mobile_device = true;
 		pages["social"] = '<div id="social"><div class="row"><div class="col-xs-3"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:80%;margin-left:30%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">Social Media</h2></div><div id="tabs" class="col-xs-offset-3"><ul class="nav nav-pills"><li class="active col-xs-4"><a href="#fb" target="_blank" data-toggle="tab"><img height="10%" src="img/fb.png"></a></li><li class="col-xs-4"><a href="#tw" target="_blank" data-toggle="tab"><img height="10%" src="img/twit.png"></a></li></ul></div></div><div class="row tab-content" style="margin-left:1px;"><div id="fb" class="tab-pane fade in active col-xs-11"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="320" height="600" style="border:none;overflow:scroll" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div id="tw" class="tab-pane fade col-xs-11"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 		document.getElementById("content").style = "display:none";
