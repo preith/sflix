@@ -6,7 +6,7 @@ var API_KEY = "AIzaSyDcxMNdd3HVAC9gFB0OHWGMzN8Rn2f2pjk";
 var chID = "UCvnOcTFOvNxpv7-tUw-B4QA";
 var pages = {};
 var categories = {}; 
-var mainCats = [];
+var mainCats = ["Cattle", "Sheep", "Hogs", "Goats"];
 var allAdsList = [];
 var currLiveShowNum = 0;
 var mobile_device = false;
@@ -150,7 +150,7 @@ function createMobileMainPage(mainName){
 			    var set_width = (500 / 8) * size;
 			    set_width = set_width + "%";
 				name = property.split(" - ")[0];
-				firstHalfHTML = '<div class="row tile-row-mobile"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
+				firstHalfHTML = '<div class="row tile-row-mobile"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+"_"+mainName+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
 				secondHalfHTML = '</div></div></div>';
 				html += firstHalfHTML;
 			    for(i=0;i < size; i++){
@@ -243,9 +243,7 @@ function createMobilePage(name, items, category){
 	var html = '<div class="row"><div class="col-xs-3 col-sm-3"><a onclick="openPage(\''+category+'\')" title="Back to '+category+'"><img style="width:80%;margin-left:10%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">'+name+'</h2></div></div><br>';
     var size = items.length;
     var hgt = 16*size;
-    if(size % 2 == 1){
-    	hgt += 16
-    }
+    hgt += 16;
     html += '<div class="row tile-row-mobile" style="height:'+hgt+'%;"><div class="tiles-mobile"><div class="row">';
     for(i=1;i <= size; i++){
     	url = items[i-1].url;
@@ -259,7 +257,7 @@ function createMobilePage(name, items, category){
 		}
     }
     html += '</div></div></div></div></div>';
-    pages[name.replace(/ /g, "_")] = html;
+    pages[name.replace(/ /g, "_")+"_"+category] = html;
 }
 function createPage(name, items, category){
 	var html = '<div class="row"><div class="col-md-1"><a onclick="openPage(\''+category+'\')" title="Back to '+category+'"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="row"><div class="col-md-offset-1 col-md-10"><br>';
@@ -300,13 +298,20 @@ function organizeVideos(name, playList, cat){
     var size = playList.items.length;
     for(i=0;i < size; i++){
     	url = playList.items[i].snippet.resourceId.videoId;
-    	categories["all"].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
-    	categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
+    	if(categories["all"].map(function(e) { return e.url; }).indexOf(url) == -1){
+    		categories["all"].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
+    	}
+    	if(categories[cat].map(function(e) { return e.url; }).indexOf(url) == -1){
+    		categories[cat].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt, "position": playList.items[i].snippet.position});
+    	}
     	categories[name].push({"url": url, "title": playList.items[i].snippet.title, "time": playList.items[i].snippet.publishedAt});
     }
-    categories["all"].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
-    categories[cat].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
-    categories[name].sort(function(a, b){a_sec = parseInt(a.time.substr(0, 4))*60*60*24*365 + parseInt(a.time.substr(5, 2)*60*60*24*30) + parseInt(a.time.substr(8, 2))*60*60*24 + parseInt(a.time.substr(11, 2))*60*60 + parseInt(a.time.substr(14, 2))*60 + parseInt(a.time.substr(17, 2));b_sec = parseInt(b.time.substr(0, 4))*60*60*24*365 + parseInt(b.time.substr(5, 2)*60*60*24*30) + parseInt(b.time.substr(8, 2))*60*60*24 + parseInt(b.time.substr(11, 2))*60*60 + parseInt(b.time.substr(14, 2))*60 + parseInt(b.time.substr(17, 2));return b_sec-a_sec});
+    categories["all"].sort(function(a, b){a_sec = new Date(a.time.substr(0, 19)).getTime();b_sec = new Date(b.time.substr(0, 19)).getTime();return b_sec-a_sec});
+    	//organized by date
+    //categories[cat].sort(function(a, b){a_sec = new Date(a.time.substr(0, 19)).getTime();b_sec = new Date(b.time.substr(0, 19)).getTime();return b_sec-a_sec});
+    	//positionally organized
+    categories[cat].sort(function(a, b){return a.position-b.position});
+    //categories[name].sort(function(a, b){a_sec = new Date(a.time.substr(0, 19)).getTime();b_sec = new Date(b.time.substr(0, 19)).getTime();return b_sec-a_sec});
 }
 
 function openPage(name){
@@ -486,9 +491,9 @@ function getPlaylists(){
 				var cat = title.split(" - ")[1];
 				if(cat != undefined){
 					total += 1;
-					if(mainCats.indexOf(cat) == -1){
+					/*if(mainCats.indexOf(cat) == -1){
 						mainCats.push(cat);
-					}
+					}*/
 				}
 			}
 			for(i=0;i < obj.items.length; i++){
@@ -515,6 +520,8 @@ function getVidsFromPlaylist(id, title, cat, end){
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
 			vidsRecieved += 1;
+			//console.log(title);
+			//console.log(obj);
 			if(obj.items.length > 0){
 				organizeVideos(title, obj, cat);
 			}
@@ -552,45 +559,6 @@ function loadAdCars(allAds){
     	url = allAds[i].split(",")[1];
 		categories["ads"].push({"url": url, "title": title, "time": "0"});
 	}
-}
-
-function readTextFile(fileStr, allAds)
-{
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", fileStr, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                if(!allAds && fileStr.split("primary").length > 1){	//primary ad
-                	var name = allText.split(",")[0];
-                	var url = allText.split(",")[1];
-                	var html = '<a href="'+url+'" target="_blank"><img src="img/ads/primary/'+name+'" style="width:100%;"></a>';
-                	document.getElementById("primary_ad").innerHTML = html;
-                }else if(!allAds && fileStr.split("secondary").length > 1){	//secondary ads
-                	var lines = allText.split("\n");
-                	var name1 = lines[0].split(",")[0];
-                	var name2 = lines[1].split(",")[0];
-                	var url1 = lines[0].split(",")[1];
-                	var url2 = lines[1].split(",")[1];
-                	var html = '<a href="'+url1+'" target="_blank"><img src="img/ads/secondary/'+name1+'" style="width:98%;padding-bottom:10px;"></a><a href="'+url2+'" target="_blank"><img src="img/ads/secondary/'+name2+'" style="width:98%;"></a>';
-                	document.getElementById("secondary_ads").innerHTML = html;
-                }else if(fileStr.split("primary").length > 1){	//primary ads in carosel
-                	allAdsList.push(allText);
-            	}else if(fileStr.split("secondary").length > 1){	//secondary ads in carosel
-                	var lines = allText.split("\n");
-                	allAdsList.push(lines[0]);
-                	allAdsList.push(lines[1]);
-            	}else{
-                	loadAdCars(allText.split("\n"));
-                }
-            }
-        }
-    }
-    rawFile.send(null);
 }
 
 function loadLive(){
@@ -668,9 +636,7 @@ function createMobileSearchPage(query, items){
 
 	var size = items.length;
     var hgt = 16*size;
-    if(size % 2 == 1){
-    	hgt += 16
-    }
+    hgt += 8;
     html += '<div class="row tile-row-mobile" style="height:'+hgt+'%;"><div class="tiles-mobile"><div class="row">';
     for(i=1;i <= size; i++){
     	url = items[i-1].url;
@@ -815,8 +781,10 @@ window.onload = function() {
 	if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 		mobile_device = true;
 		pages["social"] = '<div id="social"><div class="row"><div class="col-xs-3"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:80%;margin-left:30%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">Social Media</h2></div><div id="tabs" class="col-xs-offset-3"><ul class="nav nav-pills"><li class="active col-xs-4"><a href="#fb" target="_blank" data-toggle="tab"><img height="10%" src="img/fb.png"></a></li><li class="col-xs-4"><a href="#tw" target="_blank" data-toggle="tab"><img height="10%" src="img/twit.png"></a></li></ul></div></div><div class="row tab-content" style="margin-left:1px;"><div id="fb" class="tab-pane fade in active col-xs-11"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="320" height="600" style="border:none;overflow:scroll" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div id="tw" class="tab-pane fade col-xs-11"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
+		document.getElementById("content").style = "display:none";
 	}else{
 		pages["social"] = '<div class="row"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-offset-1 col-md-10"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
+		document.getElementById("content-mobile").style = "display:none";
 		//document.getElementById("content").style = "position:relative;margin-top:6%;";
 	}
 	loadLive();
