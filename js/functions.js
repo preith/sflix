@@ -1,4 +1,4 @@
-var RECENT_VIDEOS_SHOWN = 20;
+var RECENT_VIDEOS_SHOWN = 28;
 var carousel_lens = [];
 var carousel_currs = [];
 var car_length = 4;
@@ -8,11 +8,31 @@ var pages = {};
 var categories = {}; 
 var mainCats = ["Cattle", "Sheep", "Hogs", "Goats"];
 var allAdsList = [];
-var currLiveShowNum = 0;
 var mobile_device = false;
 var vidsRecieved = 0;
 
-var liveLinks = [];
+var liveLinks = [{embed: "8109881", link: "SHOWmidwestelite", title: "Midwest Elite Sheep Show"}
+				];
+var upcomingLive = [	{embed: "8109881", link: "SHOWmidwestelite", title: "Midwest Elite Sheep Show"},
+						{embed: "8109959", link: "SHOWPremierGoat", title: "Premier Boer Goat Show"},
+						{embed: "8109967", link: "Premier10Sale", title: "Premier 10 Sheep Sale"},
+						{embed: "8109983", link: "SALEMWEandPremierGoat", title: "Midwest Elite Sheep Sale"},
+						{embed: "8120399", link: "events/8120399", title: "Premier Boer Goat Sale"}
+					];
+var archivedLive = [];
+var liveEmbed = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="90%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
+var liveEmbedMobile = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="75%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
+var liveClickPre = "https://livestream.com/accounts/12657864/";
+
+var currLiveShowNum = 0;
+var currLiveShowName = "";
+var currLiveDisplayed;
+if(liveLinks.length > 0){
+	currLiveDisplayed = liveLinks[0].embed;
+	currLiveShowName = liveLinks[0].title;
+	currLiveShowNum = 1;
+}
+
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -55,7 +75,7 @@ function createRecentPage(){
 	var html = '<div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="row"><div class="col-md-offset-1 col-md-10"><br>';
 
 	var curr_car = 1;
-	items = categories["all"]
+	items = categories["all"];
     var size = RECENT_VIDEOS_SHOWN;
     for(i=0;i < size; i++){
     	url = items[i].url;
@@ -240,7 +260,7 @@ function createMainPage(mainName){
     pages[mainName] = html;
 }
 function createMobilePage(name, items, category){
-	var html = '<div class="row"><div class="col-xs-3 col-sm-3"><a onclick="openPage(\''+category+'\')" title="Back to '+category+'"><img style="width:80%;margin-left:10%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">'+name+'</h2></div></div><br>';
+	var html = '<div class="row"><div class="col-xs-3 col-sm-3"><a onclick="openPage(\'home\')" title="Back to '+category+'"><img style="width:80%;margin-left:10%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">'+name+'</h2></div></div><br>';
     var size = items.length;
     var hgt = 16*size;
     hgt += 16;
@@ -257,10 +277,11 @@ function createMobilePage(name, items, category){
 		}
     }
     html += '</div></div></div></div></div>';
-    pages[name.replace(/ /g, "_")+"_"+category] = html;
+    //pages[name.replace(/ /g, "_")+"_"+category] = html;
+    pages[name.replace(/ /g, "_")] = html;
 }
 function createPage(name, items, category){
-	var html = '<div class="row"><div class="col-md-1"><a onclick="openPage(\''+category+'\')" title="Back to '+category+'"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="row"><div class="col-md-offset-1 col-md-10"><br>';
+	var html = '<div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to home"><img style="width:60%;margin-left:50%;margin-top:10%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">'+name+'</h1></div></div><div class="row"><div class="col-md-offset-1 col-md-10"><br>';
 
 	var curr_car = 1;
     var size = items.length;
@@ -291,7 +312,8 @@ function createPage(name, items, category){
 		html += '</div>';
     }
     html += '</div></div></body>';
-    pages[name.replace(/ /g, "_")+'_'+category] = html;
+    //pages[name.replace(/ /g, "_")+'_'+category] = html;
+    pages[name.replace(/ /g, "_")] = html;
 }
 
 function organizeVideos(name, playList, cat){
@@ -313,6 +335,20 @@ function organizeVideos(name, playList, cat){
     categories[cat].sort(function(a, b){return a.position-b.position});
     //categories[name].sort(function(a, b){a_sec = new Date(a.time.substr(0, 19)).getTime();b_sec = new Date(b.time.substr(0, 19)).getTime();return b_sec-a_sec});
 }
+function organizeLiveVideos(){
+    var currSize = liveLinks.length;
+    var upSize = upcomingLive.length;
+    var arcSize = archivedLive.length;
+    for(i=0;i < currSize; i++){
+    	categories["currLive"].push(liveLinks[i]);
+    }
+    for(i=0;i < upSize; i++){
+    	categories["upLive"].push(upcomingLive[i]);
+    }
+    for(i=0;i < arcSize; i++){
+    	categories["oldLive"].push(archivedLive[i]);
+    }
+}
 
 function openPage(name){
 	if(mobile_device){
@@ -333,18 +369,34 @@ function openPage(name){
 		});
 	}
 }
+function changeCurrLive(url, title){
+	document.getElementById("liveFrame").src = 'https://livestream.com/accounts/12657864/events/'+url+'/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false';
+	document.getElementById("liveTitle").innerHTML = title;
+}
+
 function loadMainCarsMobile(){
 	var html = "";
-	for(j=-2;j < mainCats.length; j++){
+	for(j=-4;j < mainCats.length; j++){
+		if(j == -4 && liveLinks.length < 2) continue;
+		if(j == -2 && upcomingLive.length < 1) continue;
+		if(j >= mainCats.length && archivedLive.length < 1) continue;
 		name = mainCats[j];
 		items = categories[name];
-		if(j == -2){
+		if(j == -4){
+			name = "Live Shows";
+			items = categories["currLive"];
+		}
+		if(j == -3){
 			name = "Most Recent";
 			items = categories["all"];
 		}
-		if(j == -1){
-			name = "Advertisements";
-			items = categories["ads"];
+		if(j == -2){
+			name = "Upcoming Live Shows";
+			items = categories["upLive"];
+		}
+		if(j >= mainCats.length){
+			name = "Archived Live Shows";
+			items = categories["oldLive"];
 		}
 		if(items != undefined){
 			idx = carousel_currs.length - 1;
@@ -357,8 +409,8 @@ function loadMainCarsMobile(){
 		    }
 		    var set_width = (500 / 8) * width_size;
 		    set_width = set_width + "%";
-			if(j == -1){
-				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:10%;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
+			if(j == -4 || j == -2 || j >= mainCats.length){
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:40%;margin-bottom:20px;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
 			}else{
 				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row-mobile" style="height:40%;"><div class="row"><div style="margin-bottom:-5px;" class="col-xs-8 col-xs-offset-2"><h4 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h4></div></div><div class="tiles-mobile"><div class="row tiles-mobile-inner">';
 			}
@@ -366,8 +418,16 @@ function loadMainCarsMobile(){
 		    for(i=0;i < size; i++){
 		    	url = items[i].url;
 		    	html += '<div class="col-xs-2 tile-mobile" id="default">';
-		    	if(j == -1){
-		    		html += '<a target="_blank" href="'+url+'"><img src="'+items[i].title+'" style="width:100%;" /></a>';
+		    		//LIVE SHOWS
+		    	if(j == -4){							
+		    		html += '<a onclick="changeCurrLive(\''+items[i].embed+'\', \''+items[i].title+'\')">'+liveEmbedMobile[0]+items[i].embed+liveEmbedMobile[1];
+					html += '</div>';
+		    	}else if(j == -2){ 	//UPCOMING LIVE				
+		    		//html += '<a target="_blank" href="'+liveClickPre+items[i].link+'">'+liveEmbedMobile[0]+items[i].embed+liveEmbedMobile[1];
+					html += liveEmbedMobile[0]+items[i].embed+liveEmbedMobile[1];
+					html += '</div>';
+		    	}else if(j >= mainCats.length){ //ARCHIVED LIVE
+		    		html += '<a target="_blank" href="'+liveClickPre+items[i].link+'">'+liveEmbedMobile[0]+items[i].embed+liveEmbedMobile[1];
 					html += '</div>';
 		    	}else{
 					html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="https://img.youtube.com/vi/'+url+'/mqdefault.jpg" style="width:100%;" />';
@@ -379,13 +439,14 @@ function loadMainCarsMobile(){
 		    html += '<div class="col-xs-2 tile-mobile" id="more">';
 			html += '<a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos"><img src="img/forward.png" style="width:50%;margin-left:20%;margin-top:10%;" /></a>';
 			html += '</div></div></div></div></div></div>';
-		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos" style="color:white;text-align:center;font-size:16;">'+name+'</a></li>';
-		    if(j == -2){
+		    if(j!= -4 && j != -2 && j < mainCats.length) document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos" style="color:white;text-align:center;font-size:16;">'+name+'</a></li>';
+		    if(j == -3){
 		    	createMobileRecentPage();
 		    }else if(j == -1){
 		    	createMobileAdsPage();
-		    }else{
-		    	createMobileMainPage(name);
+		    }else if(j > 0){
+		    	//createMobileMainPage(name);
+		    	createMobilePage(name, items, name);
 		    }
 		}
 	}
@@ -394,23 +455,34 @@ function loadMainCarsMobile(){
 }
 function loadMainCars(){
 	var html = "";
-	for(j=-2;j < mainCats.length; j++){
+	for(j=-4;j < mainCats.length + 1; j++){
+		if(j == -4 && liveLinks.length < 2) continue;
+		if(j == -2 && upcomingLive.length < 1) continue;
+		if(j >= mainCats.length && archivedLive.length < 1) continue;
 		name = mainCats[j];
 		items = categories[name];
-		if(j == -2){
+		if(j == -4){
+			name = "Live Shows";
+			items = categories["currLive"];
+		}
+		if(j == -3){
 			name = "Most Recent";
 			items = categories["all"];
 		}
-		if(j == -1){
-			name = "Advertisements";
-			items = categories["ads"];
+		if(j == -2){
+			name = "Upcoming Live Shows";
+			items = categories["upLive"];
+		}
+		if(j >= mainCats.length){
+			name = "Archived Live Shows";
+			items = categories["oldLive"];
 		}
 		if(items != undefined){
 			var curr_car = 1;
 			carousel_currs.push(1);
 			idx = carousel_currs.length - 1;
-			if(j == -1){
-				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:110%;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+			if(j == -4 || j == -2 || j >= mainCats.length){
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;margin-bottom:25px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}else{
 				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}
@@ -418,7 +490,7 @@ function loadMainCars(){
 			html += '<div class="item active">';
 			html += '<div class="row">';
 			var size = 11;
-		    	//sets max size of carosel to 15 (4 pages)
+		    	//sets max size of carosel to 12 (3 pages)
 		    if(items.length < 11 || j == -1){
 		    	size = items.length;
 		    }
@@ -437,8 +509,18 @@ function loadMainCars(){
 		    	} else {
 		    		html += '<div class="col-md-3 fill" id="default">';
 		    	}
-		    	if(j == -1){
-		    		html += '<a target="_blank" href="'+url+'"><img src="'+items[i].title+'" style="width:100%;" /></a>';
+		    		//LIVE SHOWS
+		    	if(j == -4){							
+		    		html += '<a onclick="changeCurrLive(\''+items[i].embed+'\', \''+items[i].title+'\')">'+liveEmbed[0]+items[i].embed+liveEmbed[1];
+					html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
+					html += '</div>';
+		    	}else if(j == -2){ 	//UPCOMING LIVE				
+		    		html += '<a target="_blank" href="'+liveClickPre+items[i].link+'">'+liveEmbed[0]+items[i].embed+liveEmbed[1];
+					html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
+					html += '</div>';
+		    	}else if(j >= mainCats.length){ //ARCHIVED LIVE
+		    		html += '<a target="_blank" href="'+liveClickPre+items[i].link+'">'+liveEmbed[0]+items[i].embed+liveEmbed[1];
+					html += '<img id="play" src="img/play.png" style="width:5%;"></img></a>';
 					html += '</div>';
 		    	}else{
 					html += '<a target="_blank" href="https://www.youtube.com/embed/'+url+'?autoplay=1"><img src="https://img.youtube.com/vi/'+url+'/mqdefault.jpg" style="width:100%;" />';
@@ -453,7 +535,7 @@ function loadMainCars(){
 					html += '</div>';
 				}
 		    }
-		    if(curr_car != 0){
+		    if(curr_car != 0 && j != -4 && j != -2 && j < mainCats.length){
 		    		//add a car that shows "click for more"
 		    	if(size == 11){
 		    		html += '<div class="col-md-3" id="last">';
@@ -463,15 +545,17 @@ function loadMainCars(){
 		    	html += '</div>';
 				html += '</div>';
 		    }
+		    if(j == -4 || j == -2 || j >= mainCats.length){
+		    	html += '</div></div>';
+		    }
 		    secondHalfHTML = '</div></div><div><a id="'+name.replace(/ /g, "_")+'_carousel_prev" class="left carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="prev" style="display:none;" onclick="prevClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a id="'+name.replace(/ /g, "_")+'_carousel_next" class="right carousel-control" href="#'+name.replace(/ /g, "_")+'_carousel" role="button" data-slide="next" onclick="nextClick(\''+name.replace(/ /g, "_")+'\','+idx+')"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a></div></div></div></div></div></div>';
 		    html += secondHalfHTML;
-		    document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
-		    if(j == -2){
+		    if(j!= -4 && j != -2 && j < mainCats.length) document.getElementById("dropDown").innerHTML += '<li><a onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></li>';
+		    if(j == -3){
 		    	createRecentPage();
-		    }else if(j == -1){
-		    	createAdsPage();
-		    }else{
-		    	createMainPage(name);
+		    }else if(j >= 0){
+		    	//createMainPage(name);
+		    	createPage(name, items, name);
 		    }
 		}
 	}
@@ -488,8 +572,9 @@ function getPlaylists(){
 			for(i=0;i < obj.items.length; i++){
 				var pl = obj.items[i]
 				var title = pl.snippet.title;
+				var promo = title.split(" - ")[0];
 				var cat = title.split(" - ")[1];
-				if(cat != undefined){
+				if(promo == "Video Promos"){
 					total += 1;
 					/*if(mainCats.indexOf(cat) == -1){
 						mainCats.push(cat);
@@ -500,8 +585,9 @@ function getPlaylists(){
 				var pl = obj.items[i]
 				var id = pl.id;
 				var title = pl.snippet.title;
+				var promo = title.split(" - ")[0];
 				var cat = title.split(" - ")[1];
-				if(cat != undefined){
+				if(promo == "Video Promos"){
 					if(categories[cat] == undefined){
 						categories[cat] = [];
 					}
@@ -520,8 +606,6 @@ function getVidsFromPlaylist(id, title, cat, end){
 		if (this.readyState == 4 && this.status == 200) {
 			var obj = JSON.parse(this.response);
 			vidsRecieved += 1;
-			//console.log(title);
-			//console.log(obj);
 			if(obj.items.length > 0){
 				organizeVideos(title, obj, cat);
 			}
@@ -562,18 +646,19 @@ function loadAdCars(allAds){
 }
 
 function loadLive(){
-	var numLive = liveLinks.length;
-	var title = "Live Show";
+	//var numLive = liveLinks.length;
+	var numLive = currLiveShowNum;
+	var title = currLiveShowName;
 	if(numLive > 1){
 		title = "Live Shows";
 	}
-	var head = '<div class="row"><div class="col-md-offset-1 col-md-3"><h2 style="color:white;">'+title+'</h2></div></div>';
-	var live1 = ['<div id="live1">','<div class="row"><div class="col-md-offset-1 col-md-7" style="height:80%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>'];
-	var live2 = ['<div id="live2">','<div class="row"><div class="col-md-offset-1 col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>'];
-	var live3 = ['<div id="live3">','<div class="row"><div class="col-md-offset-1 col-md-6" style="padding:5;height:74%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="margin-right:-200px;"><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div></div></div>'];
+	var head = '<div class="row"><div class="col-md-offset-1 col-md-6"><h2 id="liveTitle" style="color:white;">'+title+'</h2></div></div>';
+	var live1 = ['<div id="live1">','<div class="row"><div class="col-md-offset-1 col-md-7" style="height:80%;"><iframe id="liveFrame" src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script></div></div></div>'];
+	//var live2 = ['<div id="live2">','<div class="row"><div class="col-md-offset-1 col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="padding:5;height:60%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>'];
+	//var live3 = ['<div id="live3">','<div class="row"><div class="col-md-offset-1 col-md-6" style="padding:5;height:74%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div><div class="col-md-5" style="margin-right:-200px;"><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div><div class="row"><div class="col-md-7" style="padding:5;height:37%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div></div></div>'];
 
-	var mobileHead = '<div class="row"><div class="col-xs-offset-1 col-xs-6"><h2 style="color:white;">'+title+'</h2></div></div>'
-	var mobileLive1 = ['<div id="live1"><div class="row"><div class="col-xs-12" style="height:40%;"><iframe src="','" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe></div></div></div>']
+	var mobileHead = '<div class="row"><div class="col-xs-offset-1 col-xs-10"><h3 style="color:white;">'+title+'</h3></div></div>'
+	var mobileLive1 = ['<div id="live1"><div class="row"><div class="col-xs-12" style="height:40%;"><iframe id="liveFrame" src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" frameborder="0" gesture="media" allow="encrypted-media" width="100%" height="100%" allowfullscreen></iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script></div></div></div>']
 
 	var html = "";
 	var linkCt = 0;
@@ -582,8 +667,8 @@ function loadLive(){
 		return;
 	}else if(mobile_device){
 		html += mobileHead;
-		for(var i = 0; i < numLive; i++){
-			html += mobileLive1[0] + liveLinks[i] + mobileLive1[1];
+		if(numLive > 0){
+			html += mobileLive1[0] + currLiveDisplayed + mobileLive1[1];
 			html += '<br>';
 		}
 		document.getElementById("content-mobile").innerHTML = html + document.getElementById("content-mobile").innerHTML;
@@ -599,7 +684,9 @@ function loadLive(){
 			numLive = 0;
 		}else if((numLive % 3) == 1){
 			//maybe put side ads next to live vid?
-			html += live1[0] + head + live1[1] + liveLinks[0] + live1[2];
+					//html += live1[0] + head + live1[1] + liveLinks[0] + live1[2];
+					//linkCt += 1;
+			html += live1[0] + head + live1[1] + currLiveDisplayed + live1[2];
 			linkCt += 1;
 			//two at top
 		}else if((numLive % 3) == 2){
@@ -762,7 +849,31 @@ function dummyFunction(){
 	return;
 }
 
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+function getSortLive(){
+	readTextFile("../links/live.txt");
+	return;
+}
+
 window.onload = function() {
+	//getSortLive();
 	//add popover functionality
 	$(function () {
 		$('[data-toggle="popover"]').popover({html:true})
@@ -778,12 +889,17 @@ window.onload = function() {
 	    });
 	});
 	categories["all"] = [];
-	console.log(navigator.userAgent);
-	console.log(window.screen.availHeight, window.screen.availWidth);
-	if(/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !(window.screen.availWidth > 1000)) {
+	categories["currLive"] = [];
+	categories["upLive"] = [];
+	categories["oldLive"] = [];
+	organizeLiveVideos();
+	if(/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || !(window.screen.availWidth > 780)) {
 		mobile_device = true;
 		pages["social"] = '<div id="social"><div class="row"><div class="col-xs-3"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:80%;margin-left:30%;margin-top:10%;" src="img/back.png"></a></div><div class="col-xs-7"><h2 style="color:white;text-align:center;margin-top:10%;margin-left:-5%;">Social Media</h2></div><div id="tabs" class="col-xs-offset-3"><ul class="nav nav-pills"><li class="active col-xs-4"><a href="#fb" target="_blank" data-toggle="tab"><img height="10%" src="img/fb.png"></a></li><li class="col-xs-4"><a href="#tw" target="_blank" data-toggle="tab"><img height="10%" src="img/twit.png"></a></li></ul></div></div><div class="row tab-content" style="margin-left:1px;"><div id="fb" class="tab-pane fade in active col-xs-11"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="320" height="600" style="border:none;overflow:scroll" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div id="tw" class="tab-pane fade col-xs-11"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 		document.getElementById("content").style = "display:none";
+		if(window.screen.availWidth > 700){
+			document.getElementById("searchbar").placeholder = "";
+		}
 	}else{
 		pages["social"] = '<div class="row"><div class="row"><div class="col-md-1"><a onclick="openPage(\'home\')" title="Back to Home"><img style="width:60%;margin-left:50%;margin-top:20%;" src="img/back.png"></a></div><div class="col-md-10"><h1 style="color:white;text-align:center;">Social Media</h1></div></div><div class="col-md-offset-1 col-md-10"><br><div class="col-md-6"><iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshowbarnflix&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowTransparency="true"></iframe></div><div class="col-md-6"><a class="twitter-timeline" data-width="500" data-height="600" data-theme="light" href="https://twitter.com/ShowBarnFlix">Error loading content. Click here to see Tweets by @ShowBarnFlix</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div></div>';
 		document.getElementById("content-mobile").style = "display:none";
