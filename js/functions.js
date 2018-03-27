@@ -14,8 +14,8 @@ var vidsRecieved = 0;
 var liveLinks = [];
 var upcomingLive = [];
 var archivedLive = [];
-var liveEmbed = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="90%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
-var liveEmbedMobile = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="75%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
+var liveEmbed = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=false&mute=false" width="100%" height="90%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
+var liveEmbedMobile = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=false&mute=false" width="100%" height="75%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
 var liveClickPre = "https://livestream.com/accounts/12657864/";
 
 var currLiveShowNum = 0;
@@ -339,7 +339,7 @@ function organizeLiveVideos(){
     }
     categories["currLive"].sort(function(a, b){return a.time-b.time});
     categories["upLive"].sort(function(a, b){return a.time-b.time});
-    categories["oldLive"].sort(function(a, b){return a.time-b.time});
+    categories["oldLive"].sort(function(a, b){return b.time-a.time});
 }
 
 function openPage(name){
@@ -842,7 +842,7 @@ function dummyFunction(){
 	return;
 }
 
-function readTextFile(file)
+function readLinksFile(file)
 {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
@@ -853,15 +853,14 @@ function readTextFile(file)
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 var allText = rawFile.responseText;
-                return allText;
+                getSortLive(allText);
             }
         }
     }
     rawFile.send(null);
 }
 
-function getSortLive(){
-	var alltext = readTextFile("links/live.txt");
+function getSortLive(alltext){
 	var currDiff = 9999999; 		//difference from now to live show (least should show)
 	var now = new Date();
 	var nowHour = now.getHours();
@@ -904,10 +903,14 @@ function getSortLive(){
 							}
 						}else if((liveHour-nowHour) > -5){		//more than 5 hours away
 							upcomingLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
+						}else{		//same day but more than 5 hours old
+							archivedLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
 						}
 					}else{		//more than one day away, UPCOMING
 						upcomingLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
 					}
+				}else if((liveDay - nowDay) <= -2){	//2 or less days old
+					archivedLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
 				}
 			}
 		}
@@ -917,7 +920,7 @@ function getSortLive(){
 }
 
 window.onload = function() {
-	getSortLive();
+	readLinksFile("links/live.txt");
 	//add popover functionality
 	$(function () {
 		$('[data-toggle="popover"]').popover({html:true})
