@@ -11,14 +11,8 @@ var allAdsList = [];
 var mobile_device = false;
 var vidsRecieved = 0;
 
-var liveLinks = [{embed: "8109881", link: "SHOWmidwestelite", title: "Midwest Elite Sheep Show"}
-				];
-var upcomingLive = [	{embed: "8109881", link: "SHOWmidwestelite", title: "Midwest Elite Sheep Show"},
-						{embed: "8109959", link: "SHOWPremierGoat", title: "Premier Boer Goat Show"},
-						{embed: "8109967", link: "Premier10Sale", title: "Premier 10 Sheep Sale"},
-						{embed: "8109983", link: "SALEMWEandPremierGoat", title: "Midwest Elite Sheep Sale"},
-						{embed: "8120399", link: "events/8120399", title: "Premier Boer Goat Sale"}
-					];
+var liveLinks = [];
+var upcomingLive = [];
 var archivedLive = [];
 var liveEmbed = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="90%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
 var liveEmbedMobile = ['<iframe src="https://livestream.com/accounts/12657864/events/','/player?enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false" width="100%" height="75%" frameborder="0" scrolling="no" allowfullscreen> </iframe><script type="text/javascript" data-embed_id="ls_embed_1520995541" src="https://livestream.com/assets/plugins/referrer_tracking.js"></script>']
@@ -27,11 +21,6 @@ var liveClickPre = "https://livestream.com/accounts/12657864/";
 var currLiveShowNum = 0;
 var currLiveShowName = "";
 var currLiveDisplayed;
-if(liveLinks.length > 0){
-	currLiveDisplayed = liveLinks[0].embed;
-	currLiveShowName = liveLinks[0].title;
-	currLiveShowNum = 1;
-}
 
 
 function nextClick(id, idx) {
@@ -348,6 +337,9 @@ function organizeLiveVideos(){
     for(i=0;i < arcSize; i++){
     	categories["oldLive"].push(archivedLive[i]);
     }
+    categories["currLive"].sort(function(a, b){return a.time-b.time});
+    categories["upLive"].sort(function(a, b){return a.time-b.time});
+    categories["oldLive"].sort(function(a, b){return a.time-b.time});
 }
 
 function openPage(name){
@@ -482,7 +474,7 @@ function loadMainCars(){
 			carousel_currs.push(1);
 			idx = carousel_currs.length - 1;
 			if(j == -4 || j == -2 || j >= mainCats.length){
-				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;margin-bottom:25px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
+				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;margin-bottom:5px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}else{
 				firstHalfHTML = '<div class="row"><div id="cars" class="col-md-12"><div class="row tile-row" style=""><div class="row"><div class="col-md-offset-1 col-md-7"><h2 style="color:white;"><a style="color:white;" onclick="openPage(\''+name.replace(/ /g, "_")+'\')" title="See all '+name+' Videos">'+name+'</a></h2></div></div><div class="row tiles"><div class="col-md-12" style="height:125%;margin-top:-10px;"><div id="'+name.replace(/ /g, "_")+'_carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false"><div id="'+name.replace(/ /g, "_")+'_carousel_inner" class="carousel-inner" role="listbox">';
 			}
@@ -662,6 +654,7 @@ function loadLive(){
 
 	var html = "";
 	var linkCt = 0;
+	console.log("loading live");
 	if(numLive == 0){
 		//maybe put banner ads here?
 		return;
@@ -860,7 +853,7 @@ function readTextFile(file)
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 var allText = rawFile.responseText;
-                alert(allText);
+                return allText;
             }
         }
     }
@@ -868,12 +861,63 @@ function readTextFile(file)
 }
 
 function getSortLive(){
-	readTextFile("../links/live.txt");
+	var alltext = readTextFile("links/live.txt");
+	var currDiff = 9999999; 		//difference from now to live show (least should show)
+	var now = new Date();
+	var nowHour = now.getHours();
+	var nowDay = now.getDate();
+	var nowMonth = now.getMonth();
+	var nowYear = now.getFullYear();
+	var links = alltext.split("\n");
+	for(i=0;i<links.length;i++){
+		attr = links[i].split(",");
+		emb = attr[0].split("/events/")[1].split("/player")[0]
+		date = attr[3].split("/");
+		liveDay = parseInt(date[1]);
+		liveMonth = parseInt(date[0])-1;
+		liveYear = parseInt(date[2]);
+		liveHour = parseInt(attr[4]);
+		var d = new Date(liveYear, liveMonth, liveDay, liveHour);
+		console.log(attr[2]);
+			//current or future year
+		if(liveYear >= nowYear){
+				//current or future month
+			if(liveMonth >= nowMonth){
+					//current or future day
+				if(liveDay >= nowDay){
+						//today or tomorrow
+					if((liveDay - nowDay) <= 1){
+							//next day
+						if(liveDay > nowDay){
+							liveHour += 24;
+						}
+							//5 hours away and not more than 5 hours old
+						if((liveHour-nowHour) < 5 && (liveHour-nowHour) > -5){
+							liveLinks.push({embed: emb, link: attr[1], title: attr[2], time:d});
+							console.log(liveLinks);
+								//new soonest show, put up top
+							if(liveHour-nowHour < currDiff){
+								currDiff = liveHour-nowHour;
+								currLiveDisplayed = emb;
+								currLiveShowName = attr[2];
+								currLiveShowNum = 1;
+							}
+						}else if((liveHour-nowHour) > -5){		//more than 5 hours away
+							upcomingLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
+						}
+					}else{		//more than one day away, UPCOMING
+						upcomingLive.push({embed: emb, link: attr[1], title: attr[2], time:d});
+					}
+				}
+			}
+		}
+	}
+	loadLive();
 	return;
 }
 
 window.onload = function() {
-	//getSortLive();
+	getSortLive();
 	//add popover functionality
 	$(function () {
 		$('[data-toggle="popover"]').popover({html:true})
@@ -905,6 +949,5 @@ window.onload = function() {
 		document.getElementById("content-mobile").style = "display:none";
 		//document.getElementById("content").style = "position:relative;margin-top:6%;";
 	}
-	loadLive();
 	getPlaylists();
 }

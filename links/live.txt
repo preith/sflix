@@ -1,1 +1,5 @@
-https://livestream.com/accounts/12657864/events/8109881/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SHOWmidwestelite,Midwest Elite Sheep Show,3/30/18:10
+https://livestream.com/accounts/12657864/events/8109881/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SHOWmidwestelite,Midwest Elite Sheep Show,3/30/2018,10
+https://livestream.com/accounts/12657864/events/8109959/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SHOWPremierGoat,Premier Boer Goat Show,3/30/2018,11
+https://livestream.com/accounts/12657864/events/8109967/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,Premier10Sale,Premier 10 Sheep Sale,3/30/2018,18
+https://livestream.com/accounts/12657864/events/8109983/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SALEMWEandPremierGoat,Midwest Elite Sheep Sale,3/31/2018,9
+https://livestream.com/accounts/12657864/events/8120399/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,events/8120399,Premier Boer Goat Sale,3/31/2018,8
