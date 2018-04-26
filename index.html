@@ -4,9 +4,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/login.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="js/functions.js"></script>
+	<script src="js/login.js"></script>
 </head>
 <body id="body" style="background-color:#2b2c2d">
 <div class="header">
@@ -38,6 +40,7 @@
 	        <li>
 	      		<a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus" title="<center>Email</center>" data-placement="bottom" data-content='<span style="color:grey;">ShowbarnFlix:</span> <a href="mailto:landree@wlivestock.com">landree@wlivestock.com</a><br><span style="color:grey;">Advertising:</span> <a href="mailto:advertising@wlivestock.com">advertising@wlivestock.com</a>' html="true"><span id="noClose" style="color:white;">Contact</span></a>
 	      	</li>
+	      	<li><a href="https://www.wlivestock.com/pages/35"><span style="color:white;" class="">Live Show Archive</span></a></li>
 	      </ul>
 	  	  </div><div class="col-xs-2 col-md-5">
 	      <ul class="nav navbar-nav navbar-right">
@@ -78,7 +81,37 @@
 			© Copyright 2016 ShowBarnFlix.com | Sponsored by <a target="_blank" href="https://www.wlivestock.com" style="color:white;">Willoughby Sales</a>
 			<br>
 			<a href="mailto:landree@wlivestock.com" style="color:white;">landree@wlivestock.com</a> | <a style="color:white;" href="tel:303-519-1166">(303) 519-1166</a>
-			<p>&nbsp</p>
+			<div id="login_button" style="color:black;">
+				<!-- Button to open the modal login form -->
+				<a onclick="document.getElementById('id01').style.display='block'">Admin Login</a>
+
+				<!-- The Modal -->
+				<div id="id01" class="modal" style="text-align:center;">
+				  <!-- Modal Content -->
+				  <form class="modal-content animate" action="/login.php" style="text-align:center;">
+				  	<span onclick="document.getElementById('id01').style.display='none'" 
+				class="modal-close" title="Close Modal">&times;</span>
+					<br />
+				    <div class="imgcontainer">
+				      <img src="img/logo.png" alt="Avatar" class="avatar">
+				    </div>
+				    <br />
+				    <div class="modal-container">
+				      <label for="uname"><b>Username</b></label>
+				      <input type="" placeholder="Enter Username" name="uname" required><br>
+
+				      <label for="psw"><b>Password</b></label>
+				      <input type="password" placeholder="Enter Password" name="psw" required><br>
+				      <br />
+				      <button type="submit">Login</button>
+				    </div>
+				    <br />
+				    <div class="modal-container" style="background-color:#f1f1f1">
+				      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+				    </div>
+				  </form>
+				</div>
+			</div>
 		</div>
 	</div>
 </nav>

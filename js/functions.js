@@ -22,6 +22,39 @@ var currLiveShowNum = 0;
 var currLiveShowName = "";
 var currLiveDisplayed;
 
+var debug = true;
+var admin = true;
+
+	//ADMIN PAGE
+function addLiveLink(){
+	document.getElementById('add_new_live_button').style = 'visibility:visible';
+	document.getElementById('add_new_live').style = 'visibility:hidden';
+}
+function deleteLiveLink(title){
+	var check = confirm("Are you sure you want to remove the following link?\n"+title+"");
+	if(check){	//add to file and reload
+		console.log("deleting " + title + "...");
+	}
+}
+function displayLiveLinks(alltext){
+	var html = "<h3>Current Links</h3>";
+	var links = alltext.split("\n");
+	if(links.length <= 0){
+		html += "<em>Currently No Links on File</em>";
+	}else{
+		for(i=0;i<links.length;i++){
+			var attr = links[i].split(",");
+			//var emb = attr[0].split("/events/")[1].split("/player")[0]
+			var title = attr[2];
+			var date = attr[3];
+			var time = attr[4];
+			var time2 = "am";
+			if(parseInt(time)>11) time2 = "pm";
+			html += "<p class='liveLink'>"+title+", "+date+", "+time+" "+time2+" <span onclick='deleteLiveLink(\""+title+"\")' class='live-delete' title='Delete Link'>&times;</span></p>";
+		}
+	}
+	document.getElementById("current_lives").innerHTML = html;
+}
 
 function nextClick(id, idx) {
 	carousel_currs[idx] += 1;
@@ -844,20 +877,32 @@ function dummyFunction(){
 
 function readLinksFile(file)
 {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                getSortLive(allText);
-            }
-        }
-    }
-    rawFile.send(null);
+	if(!debug){
+	    var rawFile = new XMLHttpRequest();
+	    rawFile.open("GET", file, false);
+	    rawFile.onreadystatechange = function ()
+	    {
+	        if(rawFile.readyState === 4)
+	        {
+	            if(rawFile.status === 200 || rawFile.status == 0)
+	            {
+	                var allText = rawFile.responseText;
+	                getSortLive(allText);
+	                if(admin){
+	                	displayLiveLinks(allText);
+	               	}
+	            }
+	        }
+	    }
+	    rawFile.send(null);
+	}
+    if(debug){
+    	allText = "https://livestream.com/accounts/12657864/events/8109881/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SHOWmidwestelite,Midwest Elite Sheep Show,3/30/2018,10\nhttps://livestream.com/accounts/12657864/events/8109959/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SHOWPremierGoat,Premier Boer Goat Show,3/30/2018,11\nhttps://livestream.com/accounts/12657864/events/8109967/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,Premier10Sale,Premier 10 Sheep Sale,3/30/2018,18\nhttps://livestream.com/accounts/12657864/events/8109983/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,SALEMWEandPremierGoat,Midwest Elite Sheep Sale,3/31/2018,9\nhttps://livestream.com/accounts/12657864/events/8120399/player?width=640&height=360&enableInfoAndActivity=true&defaultDrawer=&autoPlay=true&mute=false,events/8120399,Premier Boer Goat Sale,3/31/2018,8";
+    	getSortLive(allText);
+    	if(admin){
+        	displayLiveLinks(allText);
+       	}
+	}
 }
 
 function getSortLive(alltext){
